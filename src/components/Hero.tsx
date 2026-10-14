@@ -9,7 +9,6 @@ import {
   Play,
   Pause,
   Video,
-  Eye,
   EyeOff,
   Sliders,
   X,
@@ -17,8 +16,10 @@ import {
   Brain,
   Cpu,
   Layers,
-  Activity,
-  ArrowUpRight
+  ArrowUpRight,
+  CheckCircle2,
+  Calendar,
+  MessageSquare
 } from 'lucide-react';
 
 interface HeroProps {
@@ -71,7 +72,7 @@ export const Hero: React.FC<HeroProps> = ({
   const [isPlaying, setIsPlaying] = useState<boolean>(true);
   const [selectedPresetId, setSelectedPresetId] = useState<string>('network');
   const [customVideoUrl, setCustomVideoUrl] = useState<string>('');
-  const [videoOpacity, setVideoOpacity] = useState<number>(0.26);
+  const [videoOpacity, setVideoOpacity] = useState<number>(0.22);
   const [showVideoSettings, setShowVideoSettings] = useState<boolean>(false);
   const [videoLoadError, setVideoLoadError] = useState<boolean>(false);
   const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -100,9 +101,9 @@ export const Hero: React.FC<HeroProps> = ({
   };
 
   return (
-    <section className="relative pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden border-b border-blue-900/10 bg-[#F4F4F4]">
+    <section className="relative pt-32 pb-20 md:pt-36 md:pb-24 overflow-hidden border-b border-blue-900/10 bg-[#F4F4F4]">
       
-      {/* 1. BACKGROUND VIDEO LAYER & FLUID AMBIENT MOTION */}
+      {/* 1. BACKGROUND AMBIENT VIDEO LAYER */}
       {videoEnabled && !videoLoadError && (
         <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
           <video
@@ -118,25 +119,21 @@ export const Hero: React.FC<HeroProps> = ({
           >
             <source src={activeVideoUrl} type="video/mp4" />
           </video>
-          {/* Frosted glass & canvas blend overlay */}
+          {/* Frosted canvas blend overlay */}
           <div 
-            className="absolute inset-0 bg-gradient-to-b from-[#F4F4F4]/80 via-[#F4F4F4]/70 to-[#F4F4F4] backdrop-blur-[1px]" 
+            className="absolute inset-0 bg-gradient-to-b from-[#F4F4F4]/85 via-[#F4F4F4]/80 to-[#F4F4F4] backdrop-blur-[1px]" 
             aria-hidden="true"
           />
         </div>
       )}
 
-      {/* Floating Organic Aura Orbs (Movement & Depth) */}
+      {/* Subtle Integrated Ambient Light (Grounded, No Floating Motion) */}
       <div 
-        className="absolute top-10 left-1/4 -translate-x-1/2 w-[550px] h-[350px] bg-gradient-to-br from-blue-400/20 via-indigo-300/15 to-transparent blur-3xl pointer-events-none rounded-full z-0 animate-float"
-        aria-hidden="true"
-      />
-      <div 
-        className="absolute top-1/3 right-10 w-[500px] h-[400px] bg-gradient-to-bl from-purple-400/15 via-sky-300/15 to-transparent blur-3xl pointer-events-none rounded-full z-0 animate-float-delayed"
+        className="absolute top-10 left-1/2 -translate-x-1/2 w-[900px] h-[350px] bg-gradient-to-b from-blue-300/15 via-indigo-200/10 to-transparent blur-3xl pointer-events-none rounded-full z-0"
         aria-hidden="true"
       />
 
-      {/* 2. FLOATING VIDEO CONTROL DOCK */}
+      {/* 2. DOCKED VIDEO CONTROL */}
       <div className="absolute top-20 right-4 sm:right-8 z-20 flex items-center gap-1.5">
         <div className="flex items-center gap-1 px-2.5 py-1.5 rounded-full bg-white/90 backdrop-blur-md border border-blue-900/10 shadow-xs text-xs font-mono text-blue-900">
           <button
@@ -235,7 +232,7 @@ export const Hero: React.FC<HeroProps> = ({
             <input
               type="range"
               min="0.10"
-              max="0.55"
+              max="0.45"
               step="0.05"
               value={videoOpacity}
               onChange={(e) => setVideoOpacity(parseFloat(e.target.value))}
@@ -245,12 +242,12 @@ export const Hero: React.FC<HeroProps> = ({
         </div>
       )}
 
-      {/* 3. HERO MAIN CONTENT WITH KINETIC TYPOGRAPHY */}
-      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-7">
+      {/* 3. HERO CONTENT */}
+      <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-7">
         
-        {/* Dynamic Eyebrow with pulsating live indicator */}
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/80 backdrop-blur-md border border-blue-900/10 shadow-xs text-xs font-mono font-semibold text-blue-950">
-          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
+        {/* Eyebrow badge */}
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/90 backdrop-blur-md border border-blue-900/10 shadow-xs text-xs font-mono font-semibold text-blue-950">
+          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
           <span className="text-blue-900 font-bold">Gastón Barea</span>
           <span className="text-blue-300">·</span>
           <span className="text-blue-600">Business Innovación · Negocios Inteligentes · Modern Stack</span>
@@ -274,7 +271,7 @@ export const Hero: React.FC<HeroProps> = ({
           <button
             onClick={onDiagnosticoClick}
             type="button"
-            className="px-6 py-3.5 text-sm font-semibold text-white bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 hover:from-blue-700 hover:to-indigo-800 active:scale-[0.98] rounded-full transition-all shadow-lg shadow-blue-500/25 inline-flex items-center gap-2 group cursor-pointer"
+            className="px-6 py-3.5 text-sm font-semibold text-white bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 hover:from-blue-700 hover:to-indigo-800 active:scale-[0.98] rounded-xl transition-all shadow-md shadow-blue-500/20 inline-flex items-center gap-2 group cursor-pointer"
           >
             <Sparkles className="w-4 h-4 text-blue-200 group-hover:rotate-12 transition-transform" />
             <span>Simular Solución con IA</span>
@@ -283,7 +280,7 @@ export const Hero: React.FC<HeroProps> = ({
           <button
             onClick={onScheduleClick}
             type="button"
-            className="px-6 py-3.5 text-sm font-semibold text-blue-950 bg-white hover:bg-blue-50 border border-blue-200/90 rounded-full transition-all shadow-xs inline-flex items-center gap-2 active:scale-[0.98] cursor-pointer"
+            className="px-6 py-3.5 text-sm font-semibold text-blue-950 bg-white hover:bg-blue-50/80 border border-blue-200/90 rounded-xl transition-all shadow-xs inline-flex items-center gap-2 active:scale-[0.98] cursor-pointer"
           >
             <span>Agendar Consulta Técnica</span>
             <ArrowRight className="w-4 h-4 text-blue-600" />
@@ -305,104 +302,15 @@ export const Hero: React.FC<HeroProps> = ({
           <span>Patagonia Argentina · Consultoría Estratégica & Arquitectura Remota Global</span>
         </div>
 
-        {/* 4. THREE PILLARS KINETIC FLOATING SHOWCASE (Non-structured, fluid motion) */}
-        <div className="pt-8 max-w-4xl mx-auto">
-          <div className="text-[11px] font-mono tracking-widest text-blue-700/80 uppercase font-bold text-center mb-4">
-            — LOS TRES PILARES ESTRATÉGICOS DE TRANSFORMACIÓN —
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-left">
+        {/* 4. MASTER INTEGRATED EXECUTIVE ARCHITECTURE CONSOLE (No Floating Cards, Fully Integrated Structure) */}
+        <div className="pt-6 max-w-5xl mx-auto text-left">
+          <div className="rounded-2xl bg-white border border-blue-900/15 shadow-sm overflow-hidden">
             
-            {/* Pilar 1 Floating Card */}
-            <div 
-              onClick={onExplorePillars}
-              className="group cursor-pointer rounded-2xl bg-white/90 backdrop-blur-md p-5 border border-blue-200/80 shadow-md shadow-blue-950/[0.03] hover:shadow-xl hover:border-blue-500/60 hover:-translate-y-1.5 transition-all duration-300 animate-float"
-            >
-              <div className="flex items-center justify-between mb-3">
-                <div className="w-9 h-9 rounded-xl bg-blue-50 text-blue-700 flex items-center justify-center border border-blue-200/70 group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                  <TrendingUp className="w-4 h-4" />
-                </div>
-                <span className="text-[10px] font-mono font-bold text-blue-500">
-                  PILAR 01
-                </span>
-              </div>
-              <h3 className="text-sm font-bold text-blue-950 group-hover:text-blue-600 transition-colors flex items-center gap-1">
-                <span>Business Innovación</span>
-                <ArrowUpRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
-              </h3>
-              <p className="text-xs text-blue-900/75 mt-1.5 leading-relaxed">
-                Nuevos modelos de negocio digitales, plataformas B2B, SaaS y monetización recurrente.
-              </p>
-              <div className="mt-3 pt-2 border-t border-slate-100 flex items-center justify-between text-[11px] font-mono font-semibold text-emerald-600">
-                <span>Margen Escalable</span>
-                <span>+65% ROI</span>
-              </div>
-            </div>
-
-            {/* Pilar 2 Floating Card (Delayed float) */}
-            <div 
-              onClick={onExplorePillars}
-              className="group cursor-pointer rounded-2xl bg-white/90 backdrop-blur-md p-5 border border-purple-200/80 shadow-md shadow-blue-950/[0.03] hover:shadow-xl hover:border-purple-500/60 hover:-translate-y-1.5 transition-all duration-300 animate-float-delayed"
-            >
-              <div className="flex items-center justify-between mb-3">
-                <div className="w-9 h-9 rounded-xl bg-purple-50 text-purple-700 flex items-center justify-center border border-purple-200/70 group-hover:bg-purple-600 group-hover:text-white transition-colors">
-                  <Brain className="w-4 h-4" />
-                </div>
-                <span className="text-[10px] font-mono font-bold text-purple-500">
-                  PILAR 02
-                </span>
-              </div>
-              <h3 className="text-sm font-bold text-blue-950 group-hover:text-purple-600 transition-colors flex items-center gap-1">
-                <span>Negocios Inteligentes</span>
-                <ArrowUpRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
-              </h3>
-              <p className="text-xs text-blue-900/75 mt-1.5 leading-relaxed">
-                Agentes autónomos de IA, analítica predictiva en tiempo real y automatización cero-fricción.
-              </p>
-              <div className="mt-3 pt-2 border-t border-slate-100 flex items-center justify-between text-[11px] font-mono font-semibold text-purple-600">
-                <span>Operación 24/7</span>
-                <span>-72% Tareas</span>
-              </div>
-            </div>
-
-            {/* Pilar 3 Floating Card (Slow float) */}
-            <div 
-              onClick={onExplorePillars}
-              className="group cursor-pointer rounded-2xl bg-white/90 backdrop-blur-md p-5 border border-sky-200/80 shadow-md shadow-blue-950/[0.03] hover:shadow-xl hover:border-sky-500/60 hover:-translate-y-1.5 transition-all duration-300 animate-float-slow"
-            >
-              <div className="flex items-center justify-between mb-3">
-                <div className="w-9 h-9 rounded-xl bg-sky-50 text-sky-700 flex items-center justify-center border border-sky-200/70 group-hover:bg-sky-600 group-hover:text-white transition-colors">
-                  <Cpu className="w-4 h-4" />
-                </div>
-                <span className="text-[10px] font-mono font-bold text-sky-500">
-                  PILAR 03
-                </span>
-              </div>
-              <h3 className="text-sm font-bold text-blue-950 group-hover:text-sky-600 transition-colors flex items-center gap-1">
-                <span>Modern Tech Stack</span>
-                <ArrowUpRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
-              </h3>
-              <p className="text-xs text-blue-900/75 mt-1.5 leading-relaxed">
-                Vercel Edge, Supabase/PostgreSQL, React 19, Gemini AI API y contenedores Docker.
-              </p>
-              <div className="mt-3 pt-2 border-t border-slate-100 flex items-center justify-between text-[11px] font-mono font-semibold text-sky-600">
-                <span>Latencia Edge</span>
-                <span>&lt;45ms · 99.9%</span>
-              </div>
-            </div>
-
-          </div>
-        </div>
-
-        {/* 5. GASTÓN BAREA PROFILE BADGE & DIRECT CONTACT CARD */}
-        <div className="pt-6 max-w-4xl mx-auto">
-          <div className="relative rounded-3xl bg-white/95 backdrop-blur-xl border border-blue-900/10 p-6 sm:p-8 shadow-xl shadow-blue-950/[0.04] text-left overflow-hidden">
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
-              
-              {/* Profile Slot */}
-              <div className="md:col-span-5 flex items-center gap-4">
-                <div className="relative group shrink-0">
-                  <div className="w-20 h-20 rounded-2xl bg-gradient-to-tr from-blue-100 via-indigo-50 to-sky-100 border border-blue-200 overflow-hidden flex items-center justify-center shadow-xs">
+            {/* Top Bar: Profile & Real-Time Availability (Integrated Header) */}
+            <div className="p-5 sm:p-6 bg-gradient-to-r from-slate-50 via-white to-blue-50/30 border-b border-slate-200/80 flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div className="flex items-center gap-4">
+                <div className="relative shrink-0">
+                  <div className="w-14 h-14 rounded-xl bg-gradient-to-tr from-blue-700 via-indigo-600 to-blue-900 text-white flex items-center justify-center font-black text-lg shadow-xs overflow-hidden border border-blue-950/20">
                     {profileImg ? (
                       <img 
                         src={profileImg} 
@@ -410,17 +318,14 @@ export const Hero: React.FC<HeroProps> = ({
                         className="w-full h-full object-cover"
                       />
                     ) : (
-                      <div className="flex flex-col items-center justify-center text-center p-2">
-                        <span className="text-xl font-black text-blue-900 tracking-tight">GB</span>
-                        <span className="text-[9px] font-mono font-semibold text-blue-600 uppercase tracking-wider">Patagonia</span>
-                      </div>
+                      <span>GB</span>
                     )}
                   </div>
                   <label 
-                    className="absolute -bottom-1 -right-1 bg-white hover:bg-blue-50 border border-blue-200 p-1.5 rounded-full cursor-pointer shadow-xs transition-colors"
+                    className="absolute -bottom-1 -right-1 bg-white hover:bg-blue-50 border border-slate-200 p-1 rounded-full cursor-pointer shadow-xs transition-colors"
                     title="Subir foto personalizada"
                   >
-                    <Camera className="w-3.5 h-3.5 text-blue-700" />
+                    <Camera className="w-3 h-3 text-blue-700" />
                     <input 
                       type="file" 
                       accept="image/*" 
@@ -431,41 +336,166 @@ export const Hero: React.FC<HeroProps> = ({
                 </div>
 
                 <div>
-                  <div className="flex items-center gap-1.5">
+                  <div className="flex items-center gap-2">
                     <span className="text-base font-bold text-blue-950">Gastón Barea</span>
-                    <ShieldCheck className="w-4 h-4 text-blue-600" />
+                    <span className="inline-flex items-center gap-1 text-[11px] font-mono font-semibold px-2 py-0.5 rounded-md bg-blue-100/80 text-blue-800">
+                      <ShieldCheck className="w-3 h-3 text-blue-600" />
+                      Senior Consultant
+                    </span>
                   </div>
-                  <div className="text-xs font-semibold text-blue-700">
-                    Consultor en Innovación & Arquitecto de Software
+                  <div className="text-xs text-blue-900/80 mt-0.5 font-medium">
+                    Consultor en Innovación de Negocios & Arquitecto de Software
                   </div>
-                  <div className="text-[11px] text-blue-900/70 mt-0.5">
-                    10+ años liderando transformación digital y sistemas de misión crítica
+                  <div className="text-[11px] text-slate-500 flex items-center gap-1.5 mt-0.5">
+                    <span>10+ años en sistemas de misión crítica</span>
+                    <span>·</span>
+                    <span>Patagonia & Remoto Global</span>
                   </div>
                 </div>
               </div>
 
-              {/* Pillars Snapshot metrics */}
-              <div className="md:col-span-7 grid grid-cols-3 gap-2.5 pt-3 md:pt-0 border-t md:border-t-0 md:border-l border-blue-100 md:pl-6 text-center sm:text-left">
-                <div className="p-2.5 rounded-xl bg-[#F8FAFC] border border-blue-900/6">
-                  <div className="text-xs font-mono text-blue-700 font-bold">PILAR 1</div>
-                  <div className="text-sm font-extrabold text-blue-950">Modelos B2B</div>
-                  <div className="text-[10px] text-slate-500">SaaS & Plataformas</div>
+              {/* Status and Action Pills */}
+              <div className="flex flex-wrap items-center gap-2 text-xs">
+                <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-emerald-50 border border-emerald-200/80 text-emerald-800 font-mono text-[11px] font-semibold">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                  <span>Proyectos Activos Q4/2026</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={onScheduleClick}
+                  className="px-3.5 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs flex items-center gap-1.5 transition-colors cursor-pointer shadow-xs"
+                >
+                  <Calendar className="w-3.5 h-3.5" />
+                  <span>Agendar 30m</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Middle Section: Integrated 3-Column Pillars Matrix (Seamless grid, no detached floating elements) */}
+            <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-slate-200/80 bg-white">
+              
+              {/* Pilar 1 Column */}
+              <div 
+                onClick={onExplorePillars}
+                className="p-5 sm:p-6 hover:bg-blue-50/30 transition-colors cursor-pointer group flex flex-col justify-between"
+              >
+                <div>
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="w-8 h-8 rounded-lg bg-blue-100/70 text-blue-700 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                      <TrendingUp className="w-4 h-4" />
+                    </div>
+                    <span className="text-[11px] font-mono font-bold text-blue-600">
+                      PILAR 01
+                    </span>
+                  </div>
+
+                  <h3 className="text-sm font-bold text-blue-950 group-hover:text-blue-600 transition-colors flex items-center justify-between">
+                    <span>Business Innovación</span>
+                    <ArrowUpRight className="w-3.5 h-3.5 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all text-blue-600" />
+                  </h3>
+                  <div className="text-[11px] font-semibold text-blue-700/80 mb-2">
+                    Nuevos Modelos de Negocio
+                  </div>
+
+                  <p className="text-xs text-slate-600 leading-relaxed">
+                    Transformación de servicios manuales a plataformas SaaS escalables, monetización recurrente y ecosistemas B2B con alto apalancamiento.
+                  </p>
                 </div>
 
-                <div className="p-2.5 rounded-xl bg-[#F8FAFC] border border-blue-900/6">
-                  <div className="text-xs font-mono text-purple-700 font-bold">PILAR 2</div>
-                  <div className="text-sm font-extrabold text-blue-950">Agentes IA</div>
-                  <div className="text-[10px] text-slate-500">Operación Autónoma</div>
+                <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] font-mono font-semibold">
+                  <span className="text-slate-500">Métricas:</span>
+                  <span className="text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200/60">+65% Margen · 3x Time-to-Market</span>
+                </div>
+              </div>
+
+              {/* Pilar 2 Column */}
+              <div 
+                onClick={onExplorePillars}
+                className="p-5 sm:p-6 hover:bg-purple-50/30 transition-colors cursor-pointer group flex flex-col justify-between"
+              >
+                <div>
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="w-8 h-8 rounded-lg bg-purple-100/70 text-purple-700 flex items-center justify-center group-hover:bg-purple-600 group-hover:text-white transition-colors">
+                      <Brain className="w-4 h-4" />
+                    </div>
+                    <span className="text-[11px] font-mono font-bold text-purple-600">
+                      PILAR 02
+                    </span>
+                  </div>
+
+                  <h3 className="text-sm font-bold text-blue-950 group-hover:text-purple-600 transition-colors flex items-center justify-between">
+                    <span>Negocios Inteligentes</span>
+                    <ArrowUpRight className="w-3.5 h-3.5 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all text-purple-600" />
+                  </h3>
+                  <div className="text-[11px] font-semibold text-purple-700/80 mb-2">
+                    Operaciones & Agentes IA
+                  </div>
+
+                  <p className="text-xs text-slate-600 leading-relaxed">
+                    Agentes autónomos para triage, diagnóstico y analítica predictiva en tiempo real sin fricción operativa. Operación continua 24/7.
+                  </p>
                 </div>
 
-                <div className="p-2.5 rounded-xl bg-[#F8FAFC] border border-blue-900/6">
-                  <div className="text-xs font-mono text-sky-700 font-bold">PILAR 3</div>
-                  <div className="text-sm font-extrabold text-blue-950">Vercel & Supabase</div>
-                  <div className="text-[10px] text-slate-500">Edge + Postgres</div>
+                <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] font-mono font-semibold">
+                  <span className="text-slate-500">Métricas:</span>
+                  <span className="text-purple-700 bg-purple-50 px-2 py-0.5 rounded border border-purple-200/60">-72% Tareas manuales · 24/7 SLA</span>
+                </div>
+              </div>
+
+              {/* Pilar 3 Column */}
+              <div 
+                onClick={onExplorePillars}
+                className="p-5 sm:p-6 hover:bg-sky-50/30 transition-colors cursor-pointer group flex flex-col justify-between"
+              >
+                <div>
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="w-8 h-8 rounded-lg bg-sky-100/70 text-sky-700 flex items-center justify-center group-hover:bg-sky-600 group-hover:text-white transition-colors">
+                      <Cpu className="w-4 h-4" />
+                    </div>
+                    <span className="text-[11px] font-mono font-bold text-sky-600">
+                      PILAR 03
+                    </span>
+                  </div>
+
+                  <h3 className="text-sm font-bold text-blue-950 group-hover:text-sky-600 transition-colors flex items-center justify-between">
+                    <span>Modern Tech Stack</span>
+                    <ArrowUpRight className="w-3.5 h-3.5 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all text-sky-600" />
+                  </h3>
+                  <div className="text-[11px] font-semibold text-sky-700/80 mb-2">
+                    Vercel Edge + Supabase
+                  </div>
+
+                  <p className="text-xs text-slate-600 leading-relaxed">
+                    Infraestructura desacoplada con despliegue en Vercel Edge, bases de datos PostgreSQL en Supabase, React 19 y Gemini AI con alta disponibilidad.
+                  </p>
+                </div>
+
+                <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] font-mono font-semibold">
+                  <span className="text-slate-500">Métricas:</span>
+                  <span className="text-sky-700 bg-sky-50 px-2 py-0.5 rounded border border-sky-200/60">&lt;45ms Latencia · 99.9% Uptime</span>
                 </div>
               </div>
 
             </div>
+
+            {/* Bottom Bar: Unified Architectural Data Rail (Connecting the 3 Pillars) */}
+            <div className="p-3.5 sm:p-4 bg-[#F8FAFC] border-t border-slate-200/80 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
+              <div className="flex items-center gap-2 text-slate-700">
+                <CheckCircle2 className="w-4 h-4 text-blue-600 shrink-0" />
+                <span>
+                  <strong>Sinergia de los 3 Ejes:</strong> El Modelo de Negocio genera valor, los Agentes IA automatizan la entrega y el Stack Técnico asegura escala global sin caídas.
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={onExplorePillars}
+                className="shrink-0 font-bold text-blue-600 hover:text-blue-800 transition-colors flex items-center gap-1 cursor-pointer whitespace-nowrap"
+              >
+                <span>Explorar Arquitectura y Simular Sinergia</span>
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+
           </div>
         </div>
 

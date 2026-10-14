@@ -21,33 +21,15 @@
   }
 }
 
-/* Organic Movement and Dynamic Flow Animations */
-@keyframes float-slow {
-  0%, 100% {
-    transform: translateY(0px) rotate(0deg);
-  }
-  50% {
-    transform: translateY(-12px) rotate(1.5deg);
-  }
-}
-
-@keyframes float-reverse {
-  0%, 100% {
-    transform: translateY(0px) rotate(0deg);
-  }
-  50% {
-    transform: translateY(14px) rotate(-1.5deg);
-  }
-}
-
+/* Organic Movement and Dynamic Flow Animations (Grounding: No Floating/Bobbing Cards) */
 @keyframes pulse-glow {
   0%, 100% {
-    opacity: 0.4;
+    opacity: 0.35;
     transform: scale(1);
   }
   50% {
-    opacity: 0.75;
-    transform: scale(1.08);
+    opacity: 0.65;
+    transform: scale(1.04);
   }
 }
 
@@ -78,18 +60,6 @@
   }
 }
 
-.animate-float {
-  animation: float-slow 7s ease-in-out infinite;
-}
-
-.animate-float-delayed {
-  animation: float-reverse 8.5s ease-in-out infinite;
-}
-
-.animate-float-slow {
-  animation: float-slow 12s ease-in-out infinite;
-}
-
 .animate-pulse-glow {
   animation: pulse-glow 5s ease-in-out infinite;
 }
@@ -104,37 +74,30 @@
   animation: flow-dash 1.6s linear infinite;
 }
 
-/* Glassmorphism & Liquid Pro cards */
-.liquid-card {
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(15, 36, 66, 0.08);
-  border-radius: 1.75rem;
-  box-shadow: 0 4px 20px -2px rgba(15, 36, 66, 0.05);
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+/* Integrated Architecture Console & Grounded Bento */
+.integrated-console {
+  background: #FFFFFF;
+  border: 1px solid rgba(15, 36, 66, 0.12);
+  border-radius: 1.5rem;
+  box-shadow: 0 4px 20px -4px rgba(15, 36, 66, 0.05);
 }
 
-.liquid-card:hover {
-  transform: translateY(-4px);
-  border-color: rgba(37, 99, 235, 0.3);
-  box-shadow: 0 20px 40px -10px rgba(37, 99, 235, 0.12), 0 0 0 1px rgba(37, 99, 235, 0.15);
-  background: rgba(255, 255, 255, 0.95);
+.integrated-row {
+  border-color: rgba(15, 36, 66, 0.08);
 }
 
 /* Apple Pro Theme (#F4F4F4 canvas + Deep Blue typography) */
 .apple-card {
   background: #FFFFFF;
   border: 1px solid rgba(15, 36, 66, 0.08);
-  border-radius: 1.5rem;
+  border-radius: 1.25rem;
   box-shadow: 0 2px 8px -2px rgba(15, 36, 66, 0.04);
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.25s ease;
 }
 
 .apple-card:hover {
-  border-color: rgba(30, 58, 138, 0.2);
-  box-shadow: 0 8px 24px -4px rgba(15, 36, 66, 0.08);
-  background: #FFFFFF;
+  border-color: rgba(30, 58, 138, 0.22);
+  box-shadow: 0 6px 18px -4px rgba(15, 36, 66, 0.08);
 }
 
 .apple-inset {
