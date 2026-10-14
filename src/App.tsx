@@ -6,6 +6,7 @@
 import React, { useState } from 'react';
 import { Header } from './components/Header';
 import { Hero } from './components/Hero';
+import { ThreePillarsSection } from './components/ThreePillarsSection';
 import { InteractiveDiagnosticSection } from './components/InteractiveDiagnosticSection';
 import { TopologySection } from './components/TopologySection';
 import { ServicesSection } from './components/ServicesSection';
@@ -53,7 +54,7 @@ export default function App() {
   const handleSelectService = (serviceName: string) => {
     setSelectedServiceForContact(serviceName);
     setCustomMessageForContact(
-      `Hola Gastón, me pongo en contacto para consultar sobre el servicio "${serviceName}". Buscamos evaluar los alcances para nuestra infraestructura actual.`
+      `Hola Gastón, me pongo en contacto para consultar sobre el servicio "${serviceName}". Buscamos evaluar los alcances para nuestra organización.`
     );
     scrollToSection('contacto');
   };
@@ -67,7 +68,7 @@ export default function App() {
   };
 
   const handleSelectSector = (sectorTitle: string) => {
-    setSelectedServiceForContact('Consultoría en Arquitectura de Software');
+    setSelectedServiceForContact('Consultoría en Innovación de Negocios & Arquitectura');
     setCustomMessageForContact(
       `Hola Gastón, nos interesa una solución enfocada en "${sectorTitle}". Queremos coordinar una reunión técnica para relevar necesidades.`
     );
@@ -75,9 +76,9 @@ export default function App() {
   };
 
   const handleSimilarCaseClick = (caseTitle: string) => {
-    setSelectedServiceForContact('Consultoría en Arquitectura de Software');
+    setSelectedServiceForContact('Consultoría en Innovación de Negocios & Arquitectura');
     setCustomMessageForContact(
-      `Hola Gastón, leí el caso de estudio "${caseTitle}" en tu sitio web y nuestra organización tiene un desafío con requerimientos técnicos muy similares.`
+      `Hola Gastón, leí el caso de estudio "${caseTitle}" en tu sitio web y nuestra organización tiene un desafío estratégico y técnico muy similar.`
     );
     scrollToSection('contacto');
   };
@@ -97,14 +98,14 @@ Stack aconsejado: ${scopeData.recommendedStack.join(', ')}
 Detalle: ${scopeData.summary}
 Quisiéramos coordinar una llamada de diagnóstico técnico para evaluar la viabilidad y presupuesto.`;
 
-    setSelectedServiceForContact('Consultoría en Arquitectura de Software');
+    setSelectedServiceForContact('Consultoría en Innovación de Negocios & Arquitectura');
     setCustomMessageForContact(detail);
     scrollToSection('contacto');
   };
 
   const handleScheduleWithAiProposal = (proposalSummary: string, serviceTitle: string) => {
     const contextText = `[PROPUESTA GENERADA CON EL MOTOR DE IA]\nServicio: ${serviceTitle}\n${proposalSummary}`;
-    setSelectedServiceForContact(serviceTitle || 'Consultoría en Arquitectura de Software');
+    setSelectedServiceForContact(serviceTitle || 'Consultoría en Innovación de Negocios & Arquitectura');
     setCustomMessageForContact(contextText);
     openScheduleModal(contextText);
   };
@@ -118,30 +119,37 @@ Quisiéramos coordinar una llamada de diagnóstico técnico para evaluar la viab
       />
 
       <main className="flex-1">
-        {/* 1. Hero Section & Identity Badge */}
+        {/* 1. Hero Section & Identity Badge (Fluid motion, ambient video & 3 pillars float) */}
         <Hero
           onExploreServices={() => scrollToSection('servicios')}
           onScheduleClick={() => openScheduleModal()}
           onWhatsAppClick={() => handleOpenWhatsApp()}
           onDiagnosticoClick={() => scrollToSection('diagnostico-ia')}
+          onExplorePillars={() => scrollToSection('tres-pilares')}
         />
 
-        {/* 2. Motor Interactivo de Diagnóstico & Solución de Arquitectura con IA */}
+        {/* 2. LOS 3 PILARES ESTRATÉGICOS: Innovación de Negocios, Negocios Inteligentes & Modern Stack */}
+        <ThreePillarsSection
+          onScheduleClick={openScheduleModal}
+          onDiagnosticoClick={() => scrollToSection('diagnostico-ia')}
+        />
+
+        {/* 3. Motor Interactivo de Diagnóstico & Solución de Arquitectura con IA */}
         <InteractiveDiagnosticSection
           onScheduleWithProposal={handleScheduleWithAiProposal}
           onWhatsAppWithProposal={handleOpenWhatsApp}
         />
 
-        {/* 3. Topología de Sistemas Multicapa */}
+        {/* 4. Topología de Sistemas Multicapa */}
         <TopologySection />
 
-        {/* 4. Capacidades y Servicios (01 - 04) + Auditoría */}
+        {/* 5. Capacidades y Servicios (01 - 04) + Auditoría */}
         <ServicesSection
           onSelectService={handleSelectService}
           onRequestAudit={handleRequestEmergencyAudit}
         />
 
-        {/* 5. Especificaciones Técnicas (20 Techs + Filtro + Búsqueda) */}
+        {/* 6. Especificaciones Técnicas (Modern Stack + Filtro + Búsqueda) */}
         <TechSpecsSection
           onAuditStackClick={() => {
             setSelectedServiceForContact('Auditoría Crítica & Contingencia');
@@ -152,25 +160,25 @@ Quisiéramos coordinar una llamada de diagnóstico técnico para evaluar la viab
           }}
         />
 
-        {/* 6. Metodología de Ingeniería (4 Fases con Stepper) */}
+        {/* 7. Metodología de Ingeniería (4 Fases con Stepper) */}
         <MethodologySection />
 
-        {/* 7. Casos de Estudio con Métricas Cuantificables */}
+        {/* 8. Casos de Estudio con Métricas Cuantificables */}
         <CaseStudiesSection onSimilarCaseClick={handleSimilarCaseClick} />
 
-        {/* 8. Configurador Interactivo de Arquitectura */}
+        {/* 9. Configurador Interactivo de Arquitectura */}
         <ArchitectureConfigurator
           onSendScopeToContact={handleSendScopeFromConfigurator}
           onWhatsAppWithScope={handleOpenWhatsApp}
         />
 
-        {/* 9. Propuesta de Valor Sectorial */}
+        {/* 10. Propuesta de Valor Sectorial */}
         <SectorSolutionsSection onSectorSelect={handleSelectSector} />
 
-        {/* 10. Perfil Profesional */}
+        {/* 11. Perfil Profesional */}
         <AboutProfileSection onScheduleClick={() => openScheduleModal()} />
 
-        {/* 11. Contacto Directo, Formulario, Calendly & FAQs */}
+        {/* 12. Contacto Directo, Formulario, Calendly & FAQs */}
         <ContactSection
           initialService={selectedServiceForContact}
           initialMessage={customMessageForContact}

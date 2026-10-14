@@ -18,6 +18,7 @@ app.use(express.json());
 // Initialize Gemini Client
 const apiKey = process.env.GEMINI_API_KEY;
 let ai: GoogleGenAI | null = null;
+
 if (apiKey) {
   ai = new GoogleGenAI({
     apiKey,
@@ -39,31 +40,26 @@ function generateRuleBasedProposal(payload: {
 }) {
   const { organizationType, primaryChallenge, currentStack, urgency, description } = payload;
 
-  let title = 'Arquitectura Modular de Alta Disponibilidad & Continuidad Operativa';
-  let stack = ['Linux Ubuntu 24.04 LTS', 'Docker Compose', 'Nginx Reverse Proxy', 'PostgreSQL 16', 'WireGuard VPN'];
+  let title = 'Arquitectura de Transformación: Nuevos Modelos Digitales & Operaciones con IA';
+  let stack = ['Vercel Edge Platform', 'Supabase (PostgreSQL 16 RLS)', 'Google Gemini AI API', 'React 19 + TypeScript', 'Docker Compose'];
   let time = '4 a 6 semanas';
-  let diag = `La infraestructura actual presenta riesgos de cuello de botella y fragilidad operativa. Al carecer de aislamiento de servicios y orquestación reproducible, cualquier pico de carga o fallo no controlado impacta en la continuidad del negocio.`;
-  
-  if (primaryChallenge.includes('Caídas') || primaryChallenge.includes('inestabilidad') || primaryChallenge.includes('Servidor')) {
-    title = 'Topología de Servidores Blindada & Contenedorización con Docker';
-    stack = ['Ubuntu Server LTS', 'Docker Compose', 'Fail2ban & UFW', 'PostgreSQL con WAL-G', 'Nginx SSL HTTP/2'];
+  let diag = `La organización requiere transicionar de procesos manuales a un modelo digital escalable. Conectaremos nuevos canales de monetización mediante un stack resiliente y agentes inteligentes de asistencia.`;
+
+  if (primaryChallenge.includes('Modelo') || primaryChallenge.includes('Innovación') || primaryChallenge.includes('SaaS') || primaryChallenge.includes('Plataforma')) {
+    title = 'Pilar 1: Plataforma B2B & Ecosistema de Monetización Recurrente';
+    stack = ['React 19 + TypeScript', 'Vercel Edge Network', 'Supabase PostgreSQL RLS', 'Stripe Billing / Lemonsqueezy', 'Google Gemini AI'];
+    time = '4 a 6 semanas';
+    diag = `El modelo actual depende de horas manuales o intermediación costosa. Diseñaremos un portal digital de autoservicio B2B que empaquete el know-how corporativo en activos digitales con márgenes brutos superiores al 70%.`;
+  } else if (primaryChallenge.includes('Inteligente') || primaryChallenge.includes('IA') || primaryChallenge.includes('Agente') || primaryChallenge.includes('BI') || primaryChallenge.includes('Datos')) {
+    title = 'Pilar 2: Negocio Inteligente con Agentes Autónomos & Real-Time BI';
+    stack = ['Google Gemini AI API', 'PostgreSQL pgvector & Supabase', 'LangChain Workflows', 'React 19 Streaming UI', 'Docker Pipelines'];
+    time = '3 a 5 semanas';
+    diag = `La dispersión de información y la lentitud en la toma de decisiones consumen hasta un 70% de horas en tareas repetitivas. Implementaremos agentes autónomos y un pipeline de BI predictivo en tiempo real.`;
+  } else if (primaryChallenge.includes('Stack') || primaryChallenge.includes('Servidor') || primaryChallenge.includes('Caídas') || primaryChallenge.includes('inestabilidad')) {
+    title = 'Pilar 3: Modern Tech Stack de Alta Disponibilidad & Resiliencia Cloud';
+    stack = ['Ubuntu Server 24.04 LTS', 'Docker Compose', 'Vercel Edge', 'Supabase PostgreSQL', 'Nginx Reverse Proxy con SSL'];
     time = urgency === 'Crítica (Inmediata)' ? '2 a 3 semanas (Fast-Track)' : '4 semanas';
-    diag = `Los síntomas reportados indican sobrecarga en memoria y procesos monolíticos compitiendo por recursos I/O sin cuotas asignadas. Se requiere migración a contenedores aislados con reinicio autónomo y monitoreo de métricas de hardware.`;
-  } else if (primaryChallenge.includes('BI') || primaryChallenge.includes('Datos') || primaryChallenge.includes('Excel')) {
-    title = 'Data Warehouse Centralizado & Pipeline ETL para Business Intelligence';
-    stack = ['PostgreSQL Data Warehouse', 'Python ETL (Pandas/Async)', 'Metabase / Power BI', 'Docker Compose', 'Backups Automáticos'];
-    time = '4 a 5 semanas';
-    diag = `La dispersión de información en hojas de cálculo y silos desconectados genera reportes desactualizados y pérdida de horas hombre. El diseño implementará un repositorio único con ingesta automatizada y tableros ejecutivos en tiempo real.`;
-  } else if (primaryChallenge.includes('Odoo') || primaryChallenge.includes('ERP')) {
-    title = 'Despliegue & Optimización de Odoo ERP Corporativo en Linux';
-    stack = ['Odoo ERP Community/Enterprise', 'PostgreSQL Tuning', 'Docker Compose', 'Nginx con SSL', 'Backups Cifrados Diarios'];
-    time = '6 a 8 semanas';
-    diag = `La integración de módulos de ventas, inventario, facturación y compras requiere una base relacional optimizada con pooling de conexiones y entornos de staging para pruebas antes de producción.`;
-  } else if (primaryChallenge.includes('Desarrollo') || primaryChallenge.includes('Web') || primaryChallenge.includes('Medida')) {
-    title = 'Sistema Web Progresivo a Medida con Arquitectura Desacoplada';
-    stack = ['Next.js / React', 'Tailwind CSS', 'FastAPI / Node.js Backend', 'PostgreSQL', 'Docker Hosting'];
-    time = '6 a 10 semanas';
-    diag = `Para soportar las reglas de negocio de ${organizationType || 'la organización'}, se aconseja una arquitectura desacoplada Frontend Edge con APIs REST seguras y base de datos con integridad referencial estricta.`;
+    diag = `La infraestructura presenta riesgos críticos de cuello de botella por monolitos sin aislamiento. Migraremos a topología contenerizada de alta disponibilidad con failover y monitoreo proactivo 24/7.`;
   }
 
   return {
@@ -73,51 +69,51 @@ function generateRuleBasedProposal(payload: {
     recommendedStack: stack,
     keyComponents: [
       {
-        name: 'Capa de Seguridad & Red',
-        detail: 'Firewall UFW, túnel WireGuard VPN para administración segura y certificados SSL TLS 1.3 automáticos.',
+        name: 'Capa de Innovación & Modelos Digitales',
+        detail: 'Portal de autoservicio para clientes con suscripción, onboarding en 5 minutos y monetización automatizada.',
       },
       {
-        name: 'Capa de Ejecución (Contenedores)',
-        detail: 'Servicios aislados mediante Docker Compose con límites de memoria y reinicio supervisado.',
+        name: 'Capa de Inteligencia & Agentes IA',
+        detail: 'Modelos de lenguaje multimodales Gemini y búsqueda vectorial para resolver consultas y orquestar flujos operativos.',
       },
       {
-        name: 'Capa de Persistencia & Datos',
-        detail: 'PostgreSQL con esquemas normalizados, índices optimizados y esquema de volcado cifrado diario fuera de sitio.',
+        name: 'Capa de Infraestructura & Modern Stack',
+        detail: 'Despliegues en el Edge con Vercel, persistencia segura con Supabase/PostgreSQL y contenedores Linux Docker.',
       },
       {
-        name: 'Supervisión & Monitoreo',
-        detail: 'Alertas tempranas de uso de disco y carga de CPU antes de que afecten la facturación o la atención al cliente.',
+        name: 'Observabilidad & Business Intelligence',
+        detail: 'Monitoreo de métricas clave de negocio (márgenes, tiempo de respuesta, LTV) en tiempo real.',
       },
     ],
     workPhases: [
       {
-        phase: 'Fase 1: Diagnóstico & Relevamiento In Situ / Remoto',
+        phase: 'Fase 1: Diagnóstico de Pilares & Relevamiento de Modelo',
         duration: 'Semana 1',
-        deliverable: 'Informe de auditoría técnica, cuellos de botella detectados y diagrama de topología propuesto.',
+        deliverable: 'Auditoría del modelo comercial, matriz de datos y especificación técnica de la arquitectura.',
       },
       {
-        phase: 'Fase 2: Aprovisionamiento en Entorno Staging',
+        phase: 'Fase 2: Prototipado Rápido & Staging Funcional',
         duration: 'Semana 2 a 3',
-        deliverable: 'Configuración de servidores de prueba, scripts de migración de datos y validación de integridad.',
+        deliverable: 'MVP funcional en Vercel y Supabase con agentes de IA integrados y base de datos con RLS.',
       },
       {
-        phase: 'Fase 3: Migración a Producción con Cero Pérdida',
+        phase: 'Fase 3: Despliegue en Producción & Cero Fricción',
         duration: 'Semana 4',
-        deliverable: 'Puesta en marcha programada en ventana de bajo tráfico y verificación transaccional.',
+        deliverable: 'Puesta en marcha con alta disponibilidad, DNS configurado, SSL y monitoreo en vivo.',
       },
       {
-        phase: 'Fase 4: Documentación Técnica & Acompañamiento',
+        phase: 'Fase 4: Acompañamiento Estratégico & Evolución Continua',
         duration: 'Soporte Continuo',
-        deliverable: 'Manuales de procedimiento de desastre (DRP) y canales de soporte directo con Gastón Barea.',
+        deliverable: 'Reuniones de evolución de producto, optimización de ROI y soporte directo con Gastón Barea.',
       },
     ],
     tangibleBenefits: [
-      'Disponibilidad del 99.9% asegurada mediante contenedores aislados',
-      'Cero dependencia de proveedores externos con costos en dólares impredecibles',
-      'Copias de seguridad automáticas cifradas con restauración probada',
-      'Visibilidad ejecutiva de métricas críticas en tiempo real',
+      'Multiplicador de LTV y creación de activos digitales de propiedad intelectual',
+      'Reducción de hasta un 70% en tareas operativas manuales mediante agentes IA',
+      'Infraestructura serverless de alta disponibilidad con latencia menor a 50ms',
+      'Cero dependencia de costos de servidores ociosos gracias al Edge Computing',
     ],
-    executiveMessage: `Estimado equipo de ${organizationType || 'la organización'}: este esquema preliminar ataca de raíz el problema de ${primaryChallenge || 'continuidad operativa'} sin añadir capas innecesarias de complejidad. Podemos revisar esta arquitectura en una llamada técnica de 25 minutos.`,
+    executiveMessage: `Estimado equipo de ${organizationType || 'la organización'}: esta arquitectura articula de forma directa los 3 pilares estratégicos (Innovación de Negocios, Agentes Inteligentes y Modern Stack). Podemos profundizar la viabilidad técnica en una reunión de 30 minutos sin compromiso.`,
     isAiGenerated: false,
   };
 }
@@ -127,7 +123,7 @@ app.post('/api/architecture-proposal', async (req, res) => {
   try {
     const {
       organizationType = 'Empresa Privada',
-      primaryChallenge = 'Caídas o lentitud de infraestructura',
+      primaryChallenge = 'Innovación de Negocios y Nuevos Modelos Digitales',
       currentStack = [],
       urgency = 'Media',
       customContext = '',
@@ -136,26 +132,27 @@ app.post('/api/architecture-proposal', async (req, res) => {
 
     // If Gemini client is available, generate custom proposal
     if (ai) {
-      const prompt = `
-Actúa como Gastón Barea, Consultor Tecnológico Senior y Arquitecto de Software (gastonbarea.com.ar) radicado en Chubut, Patagonia Argentina.
-Eres conocido por tu lema: "Complejidad reducida a la mínima expresión. Ingeniería pragmática orientada a la economía real".
-Priorizas software de código abierto (Linux Ubuntu, Docker Compose, PostgreSQL, Odoo ERP, Next.js, Python), alta disponibilidad (99.9% uptime), cero ataduras a proveedores (no vendor lock-in) y protección estricta de datos.
+      const prompt = `Actúa como Gastón Barea, Consultor Estratégico en Innovación de Negocios y Arquitecto de Software Senior (gastonbarea.com.ar).
+Tu enfoque profesional descansa sobre 3 Pilares Fundamentales:
+1. Business Innovación & Nuevos Modelos Digitales (Plataformas B2B, SaaS, monetización recurrente, productización de servicios expertos).
+2. Negocios Inteligentes & Operaciones Autónomas con IA (Agentes autónomos de IA, analítica predictiva en tiempo real, BI en vivo).
+3. Stack Técnico de Próxima Generación (Vercel Edge, Supabase / PostgreSQL con RLS, React 19, TypeScript, Docker Compose).
 
-Un potencial cliente ha completado el formulario de diagnóstico interactivo con los siguientes datos:
+El cliente ha completado el formulario de diagnóstico interactivo:
 - Organización / Sector: ${organizationType}
 - Desafío principal: ${primaryChallenge}
 - Tecnologías o stack actual que usan: ${currentStack.join(', ') || 'No especificado'}
 - Nivel de urgencia / Criticidad: ${urgency}
-- Contexto adicional o síntomas descritos por el cliente: "${customContext || 'Sin detalles adicionales'}"
+- Contexto adicional descrito: "${customContext || 'Sin detalles adicionales'}"
 - Nombre del solicitante: ${contactName || 'Responsable de Tecnología / Gerencia'}
 
-Genera una propuesta técnica interactiva y pragmática en formato JSON estructurado exacto.
+Genera una propuesta técnica interactiva y pragmática en formato JSON estructurado exacto que integre los 3 pilares.
 El JSON debe responder a las siguientes propiedades:
 {
-  "architectureTitle": "Título técnico claro y ejecutivo de la solución (ej: Arquitectura Contenedorizada de Alta Disponibilidad)",
-  "diagnosticSummary": "Diagnóstico conciso de 2 o 3 oraciones sobre por qué sucede el problema y cuál es la causa raíz técnica.",
+  "architectureTitle": "Título técnico claro y ejecutivo que mencione los pilares aplicables",
+  "diagnosticSummary": "Diagnóstico conciso de 2 o 3 oraciones sobre por qué sucede el problema y cuál es la oportunidad de negocio y técnica.",
   "estimatedTimeline": "Tiempo estimado de implementación (ej: 4 a 6 semanas)",
-  "recommendedStack": ["Lista de 4 a 6 tecnologías concretas recomendadas, ej: Ubuntu Server LTS, Docker Compose, PostgreSQL 16, etc."],
+  "recommendedStack": ["Lista de 4 a 6 tecnologías concretas recomendadas, ej: Vercel Edge, Supabase PostgreSQL RLS, React 19, Gemini AI API, Docker"],
   "keyComponents": [
     { "name": "Nombre del componente o capa", "detail": "Explicación breve de 1 frase del rol de este componente" }
   ],
@@ -163,14 +160,13 @@ El JSON debe responder a las siguientes propiedades:
     { "phase": "Nombre de la fase", "duration": "ej: Semana 1-2", "deliverable": "Entregable concreto de Gastón" }
   ],
   "tangibleBenefits": [
-    "Beneficio 1 medible (ej: 99.9% de disponibilidad)",
-    "Beneficio 2 medible",
-    "Beneficio 3 medible",
+    "Beneficio 1 medible de negocio o ingresos",
+    "Beneficio 2 medible de automatización/eficiencia",
+    "Beneficio 3 medible de rendimiento técnico",
     "Beneficio 4 medible"
   ],
-  "executiveMessage": "Breve mensaje personalizado directo de Gastón para el cliente invitándolo a coordinar los detalles en una consulta técnica sin cargo."
-}
-`;
+  "executiveMessage": "Breve mensaje personalizado directo de Gastón para el cliente invitándolo a coordinar los detalles en una consulta técnica de 30 minutos sin cargo."
+}`;
 
       const response = await ai.models.generateContent({
         model: 'gemini-3.8-flash',
@@ -178,7 +174,7 @@ El JSON debe responder a las siguientes propiedades:
         config: {
           responseMimeType: 'application/json',
           systemInstruction:
-            'Eres el Arquitecto de Software Gastón Barea. Responde siempre en español formal, técnico y pragmático. Devuelve únicamente el objeto JSON válido.',
+            'Eres Gastón Barea, consultor de innovación de negocios y arquitecto de software de Patagonia Argentina. Responde siempre en español formal, técnico y pragmático. Devuelve únicamente el objeto JSON válido.',
           responseSchema: {
             type: Type.OBJECT,
             properties: {
@@ -253,7 +249,6 @@ El JSON debe responder a las siguientes propiedades:
     return res.json(fallback);
   } catch (error) {
     console.error('Error in /api/architecture-proposal:', error);
-    // Graceful fallback so client UI never breaks
     const fallback = generateRuleBasedProposal({
       organizationType: req.body?.organizationType || 'Empresa',
       primaryChallenge: req.body?.primaryChallenge || 'Infraestructura',
@@ -274,27 +269,25 @@ app.post('/api/architecture-qa', async (req, res) => {
     }
 
     if (ai) {
-      const prompt = `
-Actúa como Gastón Barea, Arquitecto de Software Senior y Consultor Tecnológico.
+      const prompt = `Actúa como Gastón Barea, Consultor en Innovación de Negocios y Arquitecto de Software Senior.
 El cliente está revisando la siguiente propuesta de arquitectura técnica preliminar:
 "${JSON.stringify(proposalContext || {})}"
 
 El cliente tiene la siguiente consulta específica sobre la solución:
 "${question}"
 
-Responde con precisión de ingeniero pragmático en 2 o 3 párrafos concisos:
-1. Responde técnicamente a la inquietud sin rodeos.
-2. Explica cómo protege los datos o reduce costos operativos.
-3. Menciona cómo se validaría esto durante la auditoría o llamada inicial.
-Mantén el tono profesional, claro, seguro y accesible para gerentes.
-`;
+Responde con precisión de ingeniero pragmático y estratega de negocio en 2 o 3 párrafos concisos:
+1. Responde a la inquietud explicando el impacto en su modelo de negocio y en su stack técnico.
+2. Explica cómo protege los datos, reduce costos operativos o multiplica márgenes.
+3. Menciona cómo se validaría esto durante la reunión de 30 minutos.
+Mantén el tono profesional, claro, seguro y accesible.`;
 
       const response = await ai.models.generateContent({
         model: 'gemini-3.8-flash',
         contents: prompt,
         config: {
           systemInstruction:
-            'Eres Gastón Barea, arquitecto de software de Patagonia Argentina. Respuestas técnicas, claras, pragmáticas.',
+            'Eres Gastón Barea, consultor de negocios digitales y arquitecto de software de Patagonia Argentina. Respuestas técnicas, claras, pragmáticas.',
         },
       });
 
@@ -303,12 +296,12 @@ Mantén el tono profesional, claro, seguro y accesible para gerentes.
 
     // Rule-based answer fallback
     return res.json({
-      answer: `Con respecto a tu consulta ("${question}"): En la arquitectura que diseño para producción, todo componente se implementa de manera desacoplada en contenedores Docker y con validación de persistencia en PostgreSQL. Esto permite que cualquier ajuste o módulo adicional se pruebe en un entorno de staging idéntico al productivo sin riesgo para la operación diaria. En nuestra llamada inicial revisaremos las particularidades de tu entorno para garantizar cero downtime.`,
+      answer: `Con respecto a tu consulta ("${question}"): Al implementar una arquitectura basada en nuestros 3 Pilares (Innovación de Negocios, Operaciones Inteligentes y Modern Stack), cualquier módulo o nuevo modelo digital se prueba en entornos de staging en Vercel y Supabase sin afectar la operación diaria. En nuestra reunión técnica de 30 minutos revisaremos este aspecto en detalle para tu caso concreto.`,
     });
   } catch (error) {
     console.error('Error in /api/architecture-qa:', error);
     return res.json({
-      answer: `Buena consulta. Toda decisión de arquitectura en mis proyectos se fundamenta en pruebas de carga previas y estándares abiertos para evitar costos ocultos. En nuestra reunión de diagnóstico técnico profundizaremos exactamente en este punto.`,
+      answer: `Buena consulta. Toda decisión de arquitectura en mis proyectos se fundamenta en pruebas de carga previas y estándares abiertos para evitar costos ocultos. En nuestra reunión técnica profundizaremos exactamente en este punto.`,
     });
   }
 });

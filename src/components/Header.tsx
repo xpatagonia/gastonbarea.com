@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, Linkedin, Github, Calendar } from 'lucide-react';
+import { Menu, X, Linkedin, Github, Calendar, Sparkles } from 'lucide-react';
 import { SITE_CONFIG } from '../data/siteConfig';
 
 interface HeaderProps {
@@ -20,12 +20,11 @@ export const Header: React.FC<HeaderProps> = ({ onScheduleClick, onWhatsAppClick
   }, []);
 
   const navLinks = [
-    { label: 'Diagnóstico IA', href: '#diagnostico-ia' },
+    { label: '3 Pilares Estratégicos', href: '#tres-pilares', highlight: true },
+    { label: 'Diagnóstico con IA', href: '#diagnostico-ia' },
     { label: 'Servicios', href: '#servicios' },
-    { label: 'Topología', href: '#topologia' },
-    { label: 'Tech Specs', href: '#tech-specs' },
-    { label: 'Metodología', href: '#metodologia' },
-    { label: 'Casos', href: '#casos' },
+    { label: 'Modern Tech Stack', href: '#tech-specs' },
+    { label: 'Casos Reales', href: '#casos' },
     { label: 'Configurador', href: '#configurador' },
     { label: 'Contacto', href: '#contacto' },
   ];
@@ -47,39 +46,48 @@ export const Header: React.FC<HeaderProps> = ({ onScheduleClick, onWhatsAppClick
           : 'bg-[#F4F4F4]/60 backdrop-blur-xl border-b border-blue-900/5 py-4'
       }`}
     >
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between gap-6">
           {/* Zone 1: Apple-style Minimalist Wordmark in Blue */}
           <a
             href="#"
             className="flex items-center gap-2.5 text-sm font-semibold tracking-tight text-blue-950 whitespace-nowrap shrink-0 group"
           >
-            <span className="w-7 h-7 rounded-lg bg-blue-900 flex items-center justify-center font-mono font-medium text-xs text-white shadow-sm shadow-blue-900/20 group-hover:bg-blue-800 transition-colors">
+            <span className="w-8 h-8 rounded-xl bg-gradient-to-tr from-blue-900 via-indigo-900 to-blue-700 flex items-center justify-center font-mono font-bold text-xs text-white shadow-sm shadow-blue-900/20 group-hover:scale-105 transition-all">
               GB
             </span>
-            <span className="text-blue-950 font-bold group-hover:text-blue-700 transition-colors">
-              Gastón Barea
-            </span>
+            <div className="flex flex-col">
+              <span className="text-blue-950 font-bold group-hover:text-blue-700 transition-colors leading-tight">
+                Gastón Barea
+              </span>
+              <span className="text-[10px] font-mono text-blue-600 font-medium">
+                Business & Tech Architecture
+              </span>
+            </div>
           </a>
 
           {/* Zone 2: Navigation Links in Blue */}
-          <nav className="hidden lg:flex items-center gap-6 text-[13px] font-medium text-blue-900/75">
+          <nav className="hidden lg:flex items-center gap-5 text-[13px] font-medium text-blue-900/80">
             {navLinks.map((link) => (
               <a
                 key={link.label}
                 href={link.href}
                 onClick={(e) => handleNavClick(e, link.href)}
-                className="hover:text-blue-600 transition-colors whitespace-nowrap shrink-0"
+                className={`transition-all whitespace-nowrap shrink-0 ${
+                  link.highlight
+                    ? 'font-bold text-blue-600 bg-blue-50 px-3 py-1 rounded-full border border-blue-200/60 hover:bg-blue-100'
+                    : 'hover:text-blue-600'
+                }`}
               >
                 {link.label}
               </a>
             ))}
           </nav>
 
-          {/* Zone 3: Social Icons + Apple style CTAs */}
+          {/* Zone 3: Social Icons + Schedule CTAs */}
           <div className="hidden sm:flex items-center gap-2.5 shrink-0">
             {/* Social icons */}
-            <div className="flex items-center gap-1.5 pr-1 border-r border-blue-200/80">
+            <div className="flex items-center gap-1.5 pr-2 border-r border-blue-200/80">
               <a
                 href={SITE_CONFIG.social.linkedin}
                 target="_blank"
@@ -105,7 +113,7 @@ export const Header: React.FC<HeaderProps> = ({ onScheduleClick, onWhatsAppClick
             <button
               onClick={() => onWhatsAppClick()}
               type="button"
-              className="px-3.5 py-1.5 text-xs font-semibold text-blue-900 bg-white hover:bg-blue-50/60 border border-blue-200/80 rounded-full transition-all whitespace-nowrap shadow-xs"
+              className="px-3.5 py-1.5 text-xs font-semibold text-blue-900 bg-white hover:bg-blue-50/70 border border-blue-200/80 rounded-full transition-all whitespace-nowrap shadow-xs cursor-pointer"
             >
               WhatsApp
             </button>
@@ -113,10 +121,10 @@ export const Header: React.FC<HeaderProps> = ({ onScheduleClick, onWhatsAppClick
             <button
               onClick={onScheduleClick}
               type="button"
-              className="px-4 py-1.5 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 active:scale-[0.98] rounded-full transition-all whitespace-nowrap shadow-sm shadow-blue-600/25 flex items-center gap-1.5"
+              className="px-4 py-1.5 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 active:scale-[0.98] rounded-full transition-all whitespace-nowrap shadow-sm shadow-blue-600/25 flex items-center gap-1.5 cursor-pointer"
             >
               <Calendar className="w-3.5 h-3.5" />
-              <span>Agendar Consulta</span>
+              <span>Agendar Reunión (30m)</span>
             </button>
           </div>
 
@@ -133,7 +141,7 @@ export const Header: React.FC<HeaderProps> = ({ onScheduleClick, onWhatsAppClick
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               type="button"
-              className="p-1.5 text-blue-900 hover:text-blue-600 rounded-lg"
+              className="p-1.5 text-blue-900 hover:text-blue-600 rounded-lg cursor-pointer"
               aria-label="Abrir menú"
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -151,7 +159,11 @@ export const Header: React.FC<HeaderProps> = ({ onScheduleClick, onWhatsAppClick
                 key={link.label}
                 href={link.href}
                 onClick={(e) => handleNavClick(e, link.href)}
-                className="text-sm font-semibold text-blue-900 hover:text-blue-600"
+                className={`text-sm py-1 font-semibold ${
+                  link.highlight
+                    ? 'text-blue-600 font-bold'
+                    : 'text-blue-900 hover:text-blue-600'
+                }`}
               >
                 {link.label}
               </a>
@@ -167,7 +179,7 @@ export const Header: React.FC<HeaderProps> = ({ onScheduleClick, onWhatsAppClick
                 rel="noopener noreferrer"
                 className="p-1.5 text-blue-900 hover:text-blue-600 bg-white border border-blue-200 rounded-lg flex items-center gap-1"
               >
-                <Linkedin className="w-3.5 h-3.5" />
+                <Linkedin className="w-3.5 h-3.5 text-blue-700" />
                 <span>LinkedIn</span>
               </a>
               <a
@@ -176,7 +188,7 @@ export const Header: React.FC<HeaderProps> = ({ onScheduleClick, onWhatsAppClick
                 rel="noopener noreferrer"
                 className="p-1.5 text-blue-900 hover:text-blue-600 bg-white border border-blue-200 rounded-lg flex items-center gap-1"
               >
-                <Github className="w-3.5 h-3.5" />
+                <Github className="w-3.5 h-3.5 text-slate-800" />
                 <span>GitHub</span>
               </a>
             </div>
@@ -187,7 +199,7 @@ export const Header: React.FC<HeaderProps> = ({ onScheduleClick, onWhatsAppClick
                   setMobileMenuOpen(false);
                   onWhatsAppClick();
                 }}
-                className="w-full py-2 text-xs font-semibold text-blue-900 bg-white border border-blue-200 rounded-full"
+                className="w-full py-2.5 text-xs font-semibold text-blue-900 bg-white border border-blue-200 rounded-full"
               >
                 WhatsApp Directo
               </button>
@@ -196,10 +208,10 @@ export const Header: React.FC<HeaderProps> = ({ onScheduleClick, onWhatsAppClick
                   setMobileMenuOpen(false);
                   onScheduleClick();
                 }}
-                className="w-full py-2 text-xs font-semibold text-white bg-blue-600 rounded-full flex items-center justify-center gap-1.5"
+                className="w-full py-2.5 text-xs font-semibold text-white bg-blue-600 rounded-full flex items-center justify-center gap-1.5"
               >
                 <Calendar className="w-3.5 h-3.5" />
-                <span>Agendar Consulta (30 min)</span>
+                <span>Agendar Consulta Técnica (30 min)</span>
               </button>
             </div>
           </div>

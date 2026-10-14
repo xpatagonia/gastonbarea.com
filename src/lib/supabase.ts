@@ -66,6 +66,7 @@ export async function saveContactInquiry(inquiryData: {
   company?: string;
   serviceArea: string;
   requirements: string;
+  createdAt?: string;
 }) {
   if (!supabase) {
     console.info('Supabase no configurado aún en Vercel. Guardado local simulado.');
@@ -80,7 +81,7 @@ export async function saveContactInquiry(inquiryData: {
         company: inquiryData.company || null,
         service_area: inquiryData.serviceArea,
         requirements: inquiryData.requirements,
-        created_at: new Date().toISOString(),
+        created_at: inquiryData.createdAt || new Date().toISOString(),
       },
     ]);
 
