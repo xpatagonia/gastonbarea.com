@@ -1,11 +1,13 @@
 import React from 'react';
-import { ArrowUp, Mail, MessageSquare, ExternalLink } from 'lucide-react';
+import { ArrowUp, Mail, MessageSquare, Linkedin, Github, Calendar } from 'lucide-react';
+import { SITE_CONFIG } from '../data/siteConfig';
 
 interface FooterProps {
   onWhatsAppClick: () => void;
+  onScheduleClick?: () => void;
 }
 
-export const Footer: React.FC<FooterProps> = ({ onWhatsAppClick }) => {
+export const Footer: React.FC<FooterProps> = ({ onWhatsAppClick, onScheduleClick }) => {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -23,16 +25,36 @@ export const Footer: React.FC<FooterProps> = ({ onWhatsAppClick }) => {
                 GB
               </div>
               <span className="text-sm font-semibold text-blue-950 tracking-tight">
-                Gastón Barea
+                {SITE_CONFIG.name}
               </span>
             </div>
-
             <p className="text-xs text-blue-900/75 leading-relaxed max-w-sm font-normal">
               Consultoría tecnológica, arquitectura de software, Business Intelligence (BI) y administración de infraestructura Linux/Docker para organizaciones con altos requerimientos operativos.
             </p>
-
             <div className="text-[11px] font-mono text-blue-600 font-medium pt-1">
-              Chubut, Patagonia Argentina · Proyectos Remotos Globales
+              {SITE_CONFIG.location}
+            </div>
+
+            <div className="flex items-center gap-3 pt-2 text-xs">
+              <a
+                href={SITE_CONFIG.social.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1.5 text-blue-900/80 hover:text-blue-600 font-medium transition-colors"
+              >
+                <Linkedin className="w-3.5 h-3.5 text-blue-600" />
+                <span>LinkedIn</span>
+              </a>
+              <span className="text-blue-300">·</span>
+              <a
+                href={SITE_CONFIG.social.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1.5 text-blue-900/80 hover:text-blue-600 font-medium transition-colors"
+              >
+                <Github className="w-3.5 h-3.5 text-blue-800" />
+                <span>GitHub (@xpatagonia)</span>
+              </a>
             </div>
           </div>
 
@@ -43,7 +65,7 @@ export const Footer: React.FC<FooterProps> = ({ onWhatsAppClick }) => {
             </div>
             <ul className="space-y-2 text-xs font-medium text-blue-900/80">
               <li>
-                <a href="#" className="hover:text-blue-600 transition-colors">Inicio</a>
+                <a href="#diagnostico-ia" className="hover:text-blue-600 transition-colors">Diagnóstico IA</a>
               </li>
               <li>
                 <a href="#servicios" className="hover:text-blue-600 transition-colors">Servicios</a>
@@ -63,25 +85,39 @@ export const Footer: React.FC<FooterProps> = ({ onWhatsAppClick }) => {
               <li>
                 <a href="#configurador" className="hover:text-blue-600 transition-colors">Configurador</a>
               </li>
+              <li>
+                <a href="#contacto" className="hover:text-blue-600 transition-colors">Contacto</a>
+              </li>
             </ul>
           </div>
 
-          {/* Contact (4 cols) */}
+          {/* Contact & Booking (4 cols) */}
           <div className="lg:col-span-4 space-y-3">
             <div className="text-xs font-mono uppercase tracking-widest text-blue-950 font-bold">
-              Atención Directa
+              Agenda & Contacto Directo
             </div>
             <p className="text-xs text-blue-900/75 leading-relaxed font-normal">
               Atención técnica directa para directores, gerentes de sistemas y líderes de proyectos.
             </p>
 
-            <div className="space-y-2 pt-1 font-mono text-xs">
+            <div className="space-y-2.5 pt-1 font-mono text-xs">
+              {onScheduleClick && (
+                <button
+                  type="button"
+                  onClick={onScheduleClick}
+                  className="flex items-center gap-2 text-blue-700 hover:text-blue-950 transition-colors font-medium text-left"
+                >
+                  <Calendar className="w-3.5 h-3.5 text-blue-600" />
+                  <span className="underline underline-offset-2">Agendar por Calendly (30 min)</span>
+                </button>
+              )}
+
               <a 
-                href="mailto:gastonbarea.com@gmail.com" 
+                href={`mailto:${SITE_CONFIG.email}`} 
                 className="flex items-center gap-2 text-blue-900/80 hover:text-blue-600 transition-colors font-medium"
               >
                 <Mail className="w-3.5 h-3.5 text-blue-600" />
-                <span>gastonbarea.com@gmail.com</span>
+                <span>{SITE_CONFIG.email}</span>
               </a>
 
               <button
@@ -89,17 +125,17 @@ export const Footer: React.FC<FooterProps> = ({ onWhatsAppClick }) => {
                 onClick={onWhatsAppClick}
                 className="flex items-center gap-2 text-blue-900/80 hover:text-blue-600 transition-colors font-medium text-left"
               >
-                <MessageSquare className="w-3.5 h-3.5 text-blue-600" />
+                <MessageSquare className="w-3.5 h-3.5 text-emerald-600" />
                 <span>Canal de WhatsApp</span>
               </button>
 
               <a
-                href="https://www.linkedin.com"
+                href={SITE_CONFIG.social.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 text-blue-900/80 hover:text-blue-600 transition-colors font-medium"
               >
-                <ExternalLink className="w-3.5 h-3.5 text-blue-500" />
+                <Linkedin className="w-3.5 h-3.5 text-blue-500" />
                 <span>LinkedIn Profesional</span>
               </a>
             </div>
@@ -110,7 +146,7 @@ export const Footer: React.FC<FooterProps> = ({ onWhatsAppClick }) => {
         {/* Bottom bar */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-blue-900/60 font-mono">
           <div>
-            © 2026 Gastón Barea. Dominio registrado: <strong className="text-blue-950 font-semibold">gastonbarea.com.ar</strong>
+            © 2026 {SITE_CONFIG.name}. Dominio registrado: <strong className="text-blue-950 font-semibold">{SITE_CONFIG.domain}</strong>
           </div>
 
           <button

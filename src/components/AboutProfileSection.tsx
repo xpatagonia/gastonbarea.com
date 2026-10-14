@@ -2,10 +2,13 @@ import React from 'react';
 import { 
   ShieldCheck, 
   MapPin, 
-  ExternalLink, 
   Check, 
-  ArrowRight 
+  ArrowRight,
+  Linkedin,
+  Github,
+  CalendarCheck
 } from 'lucide-react';
+import { SITE_CONFIG } from '../data/siteConfig';
 
 interface AboutProfileSectionProps {
   onScheduleClick: () => void;
@@ -23,11 +26,9 @@ export const AboutProfileSection: React.FC<AboutProfileSectionProps> = ({ onSche
             <div className="text-[11px] font-mono tracking-widest uppercase text-blue-600 font-semibold">
               PERFIL PROFESIONAL
             </div>
-
             <h2 className="text-3xl sm:text-5xl font-bold text-blue-950 tracking-tight leading-tight">
               Ingeniería pragmática orientada a la economía real.
             </h2>
-
             <div className="space-y-4 text-base text-blue-900/85 leading-relaxed font-normal">
               <p>
                 Soy <strong className="text-blue-950 font-bold">Gastón Barea</strong>, consultor tecnológico y arquitecto de sistemas. A lo largo de más de diez años de trayectoria profesional, he diseñado soluciones de software, modernizado centros de datos con Linux y desplegado sistemas de Business Intelligence para empresas corporativas, cooperativas de servicios públicos y organizaciones en constante evolución.
@@ -78,7 +79,6 @@ export const AboutProfileSection: React.FC<AboutProfileSectionProps> = ({ onSche
                 </li>
               </ul>
             </div>
-
           </div>
 
           {/* Right Identity Card (5 cols) */}
@@ -91,10 +91,10 @@ export const AboutProfileSection: React.FC<AboutProfileSectionProps> = ({ onSche
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
-                    <h3 className="text-lg font-bold text-blue-950">Gastón Barea</h3>
+                    <h3 className="text-lg font-bold text-blue-950">{SITE_CONFIG.name}</h3>
                     <ShieldCheck className="w-4 h-4 text-blue-600" />
                   </div>
-                  <p className="text-xs font-mono text-blue-700 font-semibold">gastonbarea.com.ar</p>
+                  <p className="text-xs font-mono text-blue-700 font-semibold">{SITE_CONFIG.domain}</p>
                   <p className="text-xs text-blue-900/70 flex items-center gap-1 mt-1 font-medium">
                     <MapPin className="w-3.5 h-3.5 text-blue-600" />
                     <span>Chubut, Argentina</span>
@@ -105,7 +105,7 @@ export const AboutProfileSection: React.FC<AboutProfileSectionProps> = ({ onSche
               <div className="py-6 space-y-3.5 text-xs text-blue-900/80">
                 <div className="flex items-center justify-between">
                   <span className="text-blue-700">Rol Principal:</span>
-                  <span className="text-blue-950 font-bold">Arquitecto de Software</span>
+                  <span className="text-blue-950 font-bold">{SITE_CONFIG.role}</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-blue-700">Especialidad:</span>
@@ -125,28 +125,41 @@ export const AboutProfileSection: React.FC<AboutProfileSectionProps> = ({ onSche
                 <button
                   onClick={onScheduleClick}
                   type="button"
-                  className="w-full py-3 px-4 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-full transition-all shadow-md shadow-blue-500/20 flex items-center justify-center gap-2"
+                  className="w-full py-3 px-4 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 active:scale-[0.98] rounded-full transition-all shadow-md shadow-blue-500/20 flex items-center justify-center gap-2"
                 >
-                  <span>Agendar Consulta</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
+                  <CalendarCheck className="w-4 h-4" />
+                  <span>Agendar Consulta Técnica (30 min)</span>
+                  <ArrowRight className="w-3.5 h-3.5 ml-auto" />
                 </button>
 
-                <a
-                  href="https://www.linkedin.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-full py-2.5 px-4 text-xs font-semibold text-blue-900 hover:text-blue-950 bg-blue-50/70 hover:bg-blue-100/70 rounded-full border border-blue-200 transition-colors flex items-center justify-center gap-2"
-                >
-                  <span>Conectar en LinkedIn</span>
-                  <ExternalLink className="w-3.5 h-3.5 text-blue-500" />
-                </a>
+                <div className="grid grid-cols-2 gap-2">
+                  <a
+                    href={SITE_CONFIG.social.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="py-2.5 px-3 text-xs font-semibold text-blue-900 hover:text-blue-950 bg-blue-50/70 hover:bg-blue-100/70 rounded-full border border-blue-200 transition-colors flex items-center justify-center gap-1.5"
+                  >
+                    <Linkedin className="w-3.5 h-3.5 text-blue-600" />
+                    <span>LinkedIn</span>
+                  </a>
+
+                  <a
+                    href={SITE_CONFIG.social.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="py-2.5 px-3 text-xs font-semibold text-blue-900 hover:text-blue-950 bg-blue-50/70 hover:bg-blue-100/70 rounded-full border border-blue-200 transition-colors flex items-center justify-center gap-1.5"
+                  >
+                    <Github className="w-3.5 h-3.5 text-blue-800" />
+                    <span>GitHub</span>
+                  </a>
+                </div>
 
                 <div className="text-center pt-1">
                   <a
-                    href="mailto:gastonbarea.com@gmail.com"
+                    href={`mailto:${SITE_CONFIG.email}`}
                     className="text-xs font-mono text-blue-700 hover:text-blue-950 transition-colors font-medium"
                   >
-                    gastonbarea.com@gmail.com
+                    {SITE_CONFIG.email}
                   </a>
                 </div>
               </div>

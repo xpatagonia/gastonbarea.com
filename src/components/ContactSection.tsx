@@ -6,21 +6,28 @@ import {
   ChevronUp, 
   MapPin, 
   Mail, 
-  MessageSquare
+  MessageSquare,
+  Calendar,
+  Linkedin,
+  Github,
+  ExternalLink
 } from 'lucide-react';
 import { FAQS_DATA } from '../data/content';
+import { SITE_CONFIG } from '../data/siteConfig';
 import { saveContactInquiry } from '../lib/supabase';
 
 interface ContactSectionProps {
   initialService?: string;
   initialMessage?: string;
   onWhatsAppClick: (customMessage?: string) => void;
+  onScheduleClick?: () => void;
 }
 
 export const ContactSection: React.FC<ContactSectionProps> = ({
   initialService,
   initialMessage,
   onWhatsAppClick,
+  onScheduleClick,
 }) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -43,107 +50,121 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
 
   const validateForm = () => {
     const errors: { [key: string]: string } = {};
-    if (!name.trim()) errors.name = 'Por favor ingresá tu nombre y apellido';
+    if (!name.trim()) errors.name = 'El nombre es obligatorio';
     if (!email.trim()) {
-      errors.email = 'Por favor ingresá tu correo electrónico corporativo';
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      errors.email = 'Ingresá un formato de email válido';
+      errors.email = 'El email es obligatorio';
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+      errors.email = 'Formato de correo electrónico no válido';
     }
-    if (!requirements.trim()) errors.requirements = 'Por favor detallá brevemente tu requerimiento';
-    return errors;
+    if (!company.trim()) errors.company = 'La organización o empresa es obligatoria';
+    if (!requirements.trim()) errors.requirements = 'Por favor detallá el requerimiento técnico';
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const errors = validateForm();
-    if (Object.keys(errors).length > 0) {
-      setFormErrors(errors);
-      return;
-    }
-    setFormErrors({});
-    setSubmitted(true);
+    if (!validateForm()) return;
 
-    // Persist contact message to Supabase (if configured)
-    saveContactInquiry({
+    // Send to Supabase if configured, otherwise persist smoothly
+    await saveContactInquiry({
       name,
       email,
       company,
       serviceArea,
       requirements,
-    }).catch((err) => console.debug('Supabase contact save skipped:', err));
+      createdAt: new Date().toISOString(),
+    });
+
+    setSubmitted(true);
   };
 
   const toggleFaq = (index: number) => {
-    setOpenFaqIndex((prev) => (prev === index ? null : index));
+    setOpenFaqIndex(openFaqIndex === index ? null : index);
   };
 
   return (
-    <section id="contacto" className="py-24 md:py-32 bg-[#F4F4F4] relative">
+    <section id="contacto" className="py-24 md:py-32 bg-[#F4F4F4] relative border-b border-blue-900/10 scroll-mt-20">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Apple Section Header in Blue */}
-        <div className="max-w-3xl mb-16">
-          <div className="text-[11px] font-mono tracking-widest uppercase text-blue-600 mb-3 font-semibold">
-            CONTACTO DIRECTO
+        {/* Section Header */}
+        <div className="max-w-3xl mb-16 space-y-3">
+          <div className="text-[11px] font-mono tracking-widest uppercase text-blue-600 font-semibold">
+            CONTACTO & AGENDAMIENTO TÉCNICO
           </div>
-          <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-blue-950 leading-tight">
-            Iniciemos una conversación sobre el futuro técnico de tu empresa.
+          <h2 className="text-3xl sm:text-5xl font-bold text-blue-950 tracking-tight">
+            Iniciemos una conversación directa de ingeniería.
           </h2>
-          <p className="text-base sm:text-lg text-blue-900/80 mt-4 leading-relaxed font-normal">
-            Diagnósticos de arquitectura, desarrollo a medida o auditorías de infraestructura. Respuesta técnica directa en menos de 24 horas hábiles.
+          <p className="text-base text-blue-900/80 leading-relaxed font-normal">
+            Elegí coordinar una llamada de 30 minutos vía Calendly / Cal.com, enviar un requerimiento detallado por formulario o conectar por WhatsApp y LinkedIn.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
           
-          {/* Form (7 cols) */}
+          {/* Main Form (7 cols) */}
           <div className="lg:col-span-7">
-            <div className="rounded-3xl bg-white border border-blue-900/10 p-8 sm:p-10 shadow-sm">
+            <div className="rounded-3xl bg-white border border-blue-900/10 p-8 sm:p-10 shadow-lg shadow-blue-950/[0.04]">
               
+              <div className="flex items-center justify-between pb-6 border-b border-blue-100 mb-6">
+                <div>
+                  <h3 className="text-lg font-bold text-blue-950">Formulario de Requerimiento Técnico</h3>
+                  <p className="text-xs text-blue-800/70">Respuesta técnica garantizada en menos de 24 horas hábiles.</p>
+                </div>
+                {onScheduleClick && (
+                  <button
+                    type="button"
+                    onClick={onScheduleClick}
+                    className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200/60 transition-colors"
+                  >
+                    <Calendar className="w-3.5 h-3.5 text-blue-600" />
+                    <span>¿Preferís agendar?</span>
+                  </button>
+                )}
+              </div>
+
               {submitted ? (
                 <div className="py-12 text-center space-y-4">
-                  <div className="w-14 h-14 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center mx-auto border border-blue-200">
-                    <Check className="w-6 h-6" />
+                  <div className="w-16 h-16 rounded-full bg-blue-100 text-blue-700 mx-auto flex items-center justify-center">
+                    <Check className="w-8 h-8" />
                   </div>
-                  <h3 className="text-2xl font-bold text-blue-950 tracking-tight">
-                    Mensaje Recibido
-                  </h3>
-                  <p className="text-sm text-blue-900/80 max-w-md mx-auto leading-relaxed">
-                    Gracias, <strong className="text-blue-950 font-bold">{name}</strong>. Revisaré personalmente los requerimientos de <strong className="text-blue-950 font-bold">{company || 'tu empresa'}</strong> y te responderé a <strong className="text-blue-700 font-bold">{email}</strong> en menos de 24 horas.
+                  <h4 className="text-xl font-bold text-blue-950">¡Requerimiento Recibido con Éxito!</h4>
+                  <p className="text-xs text-blue-900/80 max-w-md mx-auto leading-relaxed">
+                    Gastón Barea revisará los detalles técnicos de tu solicitud y te responderá a <strong className="text-blue-950 font-semibold">{email}</strong> a la brevedad.
                   </p>
+                  
                   <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-3">
+                    {onScheduleClick && (
+                      <button
+                        onClick={onScheduleClick}
+                        type="button"
+                        className="py-2.5 px-5 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-full transition-all shadow-md shadow-blue-500/20 flex items-center gap-2"
+                      >
+                        <Calendar className="w-3.5 h-3.5" />
+                        <span>Agendar también llamada (30 min)</span>
+                      </button>
+                    )}
                     <button
-                      type="button"
-                      onClick={() => {
-                        const whatsappMsg = `Hola Gastón, te envié un formulario desde ${company || 'mi empresa'}. Soy ${name}. Quería avisarte por este canal para coordinar.`;
-                        onWhatsAppClick(whatsappMsg);
-                      }}
-                      className="px-5 py-2.5 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-full inline-flex items-center gap-2 shadow-sm"
-                    >
-                      <MessageSquare className="w-3.5 h-3.5" />
-                      <span>Notificar por WhatsApp</span>
-                    </button>
-                    <button
-                      type="button"
                       onClick={() => setSubmitted(false)}
-                      className="text-xs text-blue-700 hover:text-blue-950 underline pt-1 sm:pt-0 font-medium"
+                      type="button"
+                      className="text-xs font-mono text-blue-700 hover:text-blue-950 underline py-2"
                     >
                       Enviar otra consulta
                     </button>
                   </div>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit} className="space-y-5">
+                <form onSubmit={handleSubmit} className="space-y-4 text-left">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-xs font-mono uppercase tracking-wider text-blue-800 mb-2 font-semibold">
-                        Nombre y Apellido <span className="text-blue-600">*</span>
+                        Tu Nombre Completo <span className="text-blue-600">*</span>
                       </label>
                       <input
                         type="text"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
-                        placeholder="Ej. Roberto Sánchez"
+                        placeholder="Ej. Ing. Martín Rodríguez"
                         className={`w-full bg-[#F8FAFC] border text-blue-950 px-4 py-3 text-xs rounded-xl focus:outline-none transition-colors ${
                           formErrors.name ? 'border-rose-500' : 'border-blue-200 focus:border-blue-600'
                         }`}
@@ -155,13 +176,13 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
 
                     <div>
                       <label className="block text-xs font-mono uppercase tracking-wider text-blue-800 mb-2 font-semibold">
-                        Email Corporativo <span className="text-blue-600">*</span>
+                        Correo Corporativo <span className="text-blue-600">*</span>
                       </label>
                       <input
                         type="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        placeholder="roberto@tuempresa.com"
+                        placeholder="nombre@empresa.com"
                         className={`w-full bg-[#F8FAFC] border text-blue-950 px-4 py-3 text-xs rounded-xl focus:outline-none transition-colors ${
                           formErrors.email ? 'border-rose-500' : 'border-blue-200 focus:border-blue-600'
                         }`}
@@ -175,20 +196,25 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-xs font-mono uppercase tracking-wider text-blue-800 mb-2 font-semibold">
-                        Empresa u Organización
+                        Empresa u Organización <span className="text-blue-600">*</span>
                       </label>
                       <input
                         type="text"
                         value={company}
                         onChange={(e) => setCompany(e.target.value)}
-                        placeholder="Ej. Cooperativa / Empresa S.A."
-                        className="w-full bg-[#F8FAFC] border border-blue-200 text-blue-950 px-4 py-3 text-xs rounded-xl focus:outline-none focus:border-blue-600 transition-colors"
+                        placeholder="Ej. Cooperativa / Fintech / Salud"
+                        className={`w-full bg-[#F8FAFC] border text-blue-950 px-4 py-3 text-xs rounded-xl focus:outline-none transition-colors ${
+                          formErrors.company ? 'border-rose-500' : 'border-blue-200 focus:border-blue-600'
+                        }`}
                       />
+                      {formErrors.company && (
+                        <p className="text-[11px] text-rose-600 mt-1">{formErrors.company}</p>
+                      )}
                     </div>
 
                     <div>
                       <label className="block text-xs font-mono uppercase tracking-wider text-blue-800 mb-2 font-semibold">
-                        Área de Servicio
+                        Área de Interés
                       </label>
                       <select
                         value={serviceArea}
@@ -258,8 +284,30 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
             
             <div className="rounded-3xl bg-white border border-blue-900/10 p-7 space-y-4 shadow-sm">
               <div className="text-xs font-mono uppercase tracking-widest text-blue-600 font-semibold">
-                Canales Directos
+                Canales Directos & Agenda
               </div>
+
+              {/* Calendly / Cal.com Quick Booking Card */}
+              {onScheduleClick && (
+                <div className="p-4 rounded-2xl bg-blue-50/70 border border-blue-200 flex items-center justify-between gap-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-full bg-blue-600 text-white flex items-center justify-center shrink-0 shadow-xs">
+                      <Calendar className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <div className="text-xs font-bold text-blue-950">Agendar Llamada de 30 min</div>
+                      <div className="text-[11px] text-blue-800/80">Calendly / Cal.com en tiempo real</div>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={onScheduleClick}
+                    className="px-3.5 py-1.5 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-full transition-colors shrink-0 shadow-xs"
+                  >
+                    Agendar
+                  </button>
+                </div>
+              )}
 
               {/* WhatsApp */}
               <div className="p-4 rounded-2xl bg-[#F8FAFC] border border-blue-100 flex items-center justify-between gap-4">
@@ -269,7 +317,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                   </div>
                   <div>
                     <div className="text-xs font-bold text-blue-950">Canal de WhatsApp</div>
-                    <div className="text-[11px] text-blue-800/70">Respuesta ágil directa</div>
+                    <div className="text-[11px] text-blue-800/70">Coordinación ágil directa</div>
                   </div>
                 </div>
                 <button
@@ -289,14 +337,49 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                   </div>
                   <div>
                     <div className="text-xs font-bold text-blue-950">Correo Electrónico</div>
-                    <div className="text-[11px] font-mono text-blue-700 font-medium">gastonbarea.com@gmail.com</div>
+                    <div className="text-[11px] font-mono text-blue-700 font-medium">{SITE_CONFIG.email}</div>
                   </div>
                 </div>
                 <a
-                  href="mailto:gastonbarea.com@gmail.com"
+                  href={`mailto:${SITE_CONFIG.email}`}
                   className="px-3.5 py-1.5 text-xs font-semibold text-blue-800 hover:text-blue-950 bg-blue-50/70 hover:bg-blue-100/70 border border-blue-200 rounded-full transition-colors"
                 >
                   Escribir
+                </a>
+              </div>
+
+              {/* LinkedIn & GitHub Direct */}
+              <div className="grid grid-cols-2 gap-2 pt-1">
+                <a
+                  href={SITE_CONFIG.social.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-3 rounded-2xl bg-[#F8FAFC] border border-blue-100 hover:border-blue-300 transition-all flex items-center gap-2 group"
+                >
+                  <Linkedin className="w-4 h-4 text-blue-600 group-hover:scale-110 transition-transform" />
+                  <div className="text-left">
+                    <div className="text-[11px] font-bold text-blue-950">LinkedIn</div>
+                    <div className="text-[10px] text-blue-700 flex items-center gap-0.5">
+                      <span>Ver perfil</span>
+                      <ExternalLink className="w-2.5 h-2.5" />
+                    </div>
+                  </div>
+                </a>
+
+                <a
+                  href={SITE_CONFIG.social.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-3 rounded-2xl bg-[#F8FAFC] border border-blue-100 hover:border-blue-300 transition-all flex items-center gap-2 group"
+                >
+                  <Github className="w-4 h-4 text-blue-800 group-hover:scale-110 transition-transform" />
+                  <div className="text-left">
+                    <div className="text-[11px] font-bold text-blue-950">GitHub</div>
+                    <div className="text-[10px] text-blue-700 flex items-center gap-0.5">
+                      <span>@xpatagonia</span>
+                      <ExternalLink className="w-2.5 h-2.5" />
+                    </div>
+                  </div>
                 </a>
               </div>
 
@@ -307,7 +390,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                 </div>
                 <div>
                   <div className="text-xs font-bold text-blue-950">Base Operativa</div>
-                  <div className="text-[11px] text-blue-800/70">Chubut, Argentina · Consultoría Remota Global</div>
+                  <div className="text-[11px] text-blue-800/70">{SITE_CONFIG.location}</div>
                 </div>
               </div>
             </div>
@@ -317,11 +400,9 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
               <div className="text-xs font-mono uppercase tracking-widest text-blue-600 mb-2 font-semibold">
                 Preguntas Frecuentes
               </div>
-
               <div className="space-y-2">
                 {FAQS_DATA.map((faq, idx) => {
                   const isOpen = openFaqIndex === idx;
-
                   return (
                     <div
                       key={idx}
@@ -339,7 +420,6 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                           <ChevronDown className="w-4 h-4 text-blue-600 shrink-0" />
                         )}
                       </button>
-
                       {isOpen && (
                         <div className="px-4 pb-4 text-xs text-blue-900/80 leading-relaxed font-normal border-t border-blue-100/60 pt-3">
                           {faq.answer}

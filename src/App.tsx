@@ -17,10 +17,16 @@ import { SectorSolutionsSection } from './components/SectorSolutionsSection';
 import { AboutProfileSection } from './components/AboutProfileSection';
 import { ContactSection } from './components/ContactSection';
 import { Footer } from './components/Footer';
+import { ScheduleModal } from './components/ScheduleModal';
+import { SITE_CONFIG } from './data/siteConfig';
 
 export default function App() {
   const [selectedServiceForContact, setSelectedServiceForContact] = useState<string>('');
   const [customMessageForContact, setCustomMessageForContact] = useState<string>('');
+  
+  // State for Calendly / Cal.com scheduling modal
+  const [isScheduleOpen, setIsScheduleOpen] = useState<boolean>(false);
+  const [scheduleContext, setScheduleContext] = useState<string>('');
 
   const scrollToSection = (sectionId: string) => {
     const el = document.getElementById(sectionId);
@@ -29,11 +35,18 @@ export default function App() {
     }
   };
 
+  const openScheduleModal = (context?: string) => {
+    setScheduleContext(context || '');
+    setIsScheduleOpen(true);
+  };
+
   const handleOpenWhatsApp = (customText?: string) => {
-    const defaultText =
-      'Hola Gastón, estuve viendo tu sitio web (gastonbarea.com.ar) y me gustaría coordinar una consulta sobre arquitectura de software e infraestructura para mi empresa.';
+    const defaultText = SITE_CONFIG.whatsapp.defaultMessage;
     const textToSend = customText || defaultText;
-    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(textToSend)}`;
+    const phone = SITE_CONFIG.whatsapp.phoneNumber;
+    const whatsappUrl = phone
+      ? `https://wa.me/${phone}?text=${encodeURIComponent(textToSend)}`
+      : `https://wa.me/?text=${encodeURIComponent(textToSend)}`;
     window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
   };
 
@@ -76,37 +89,31 @@ export default function App() {
     recommendedStack: string[];
     summary: string;
   }) => {
-    setSelectedServiceForContact('Consultoría en Arquitectura de Software');
-    setCustomMessageForContact(
-      `[ESPECIFICACIÓN CALCULADA DESDE CONFIGURADOR]
+    const detail = `[ESPECIFICACIÓN CALCULADA DESDE CONFIGURADOR]
 Objetivo: ${scopeData.objective}
 Punto de partida: ${scopeData.startingPoint}
 Plazo estimado: ${scopeData.timeline}
 Stack aconsejado: ${scopeData.recommendedStack.join(', ')}
-
 Detalle: ${scopeData.summary}
-Quisiéramos coordinar una llamada de diagnóstico técnico para evaluar la viabilidad y presupuesto.`
-    );
+Quisiéramos coordinar una llamada de diagnóstico técnico para evaluar la viabilidad y presupuesto.`;
+
+    setSelectedServiceForContact('Consultoría en Arquitectura de Software');
+    setCustomMessageForContact(detail);
     scrollToSection('contacto');
   };
 
   const handleScheduleWithAiProposal = (proposalSummary: string, serviceTitle: string) => {
+    const contextText = `[PROPUESTA GENERADA CON EL MOTOR DE IA]\nServicio: ${serviceTitle}\n${proposalSummary}`;
     setSelectedServiceForContact(serviceTitle || 'Consultoría en Arquitectura de Software');
-    setCustomMessageForContact(
-      `[PROPUESTA GENERADA CON EL MOTOR DE IA DE GASTÓN BAREA]
-
-${proposalSummary}
-
-Solicito coordinar una sesión técnica de diagnóstico para avanzar con la implementación y costos.`
-    );
-    scrollToSection('contacto');
+    setCustomMessageForContact(contextText);
+    openScheduleModal(contextText);
   };
 
   return (
     <div className="min-h-screen bg-[#F4F4F4] text-[#0f2442] flex flex-col font-sans selection:bg-blue-500/20 selection:text-blue-950 antialiased">
-      {/* Top Navigation */}
+      {/* Top Navigation with Social & Schedule Modal Trigger */}
       <Header
-        onScheduleClick={() => scrollToSection('contacto')}
+        onScheduleClick={() => openScheduleModal()}
         onWhatsAppClick={handleOpenWhatsApp}
       />
 
@@ -114,7 +121,7 @@ Solicito coordinar una sesión técnica de diagnóstico para avanzar con la impl
         {/* 1. Hero Section & Identity Badge */}
         <Hero
           onExploreServices={() => scrollToSection('servicios')}
-          onScheduleClick={() => scrollToSection('contacto')}
+          onScheduleClick={() => openScheduleModal()}
           onWhatsAppClick={() => handleOpenWhatsApp()}
           onDiagnosticoClick={() => scrollToSection('diagnostico-ia')}
         />
@@ -128,49 +135,64 @@ Solicito coordinar una sesión técnica de diagnóstico para avanzar con la impl
         {/* 3. Topología de Sistemas Multicapa */}
         <TopologySection />
 
-        {/* 3. Capacidades y Servicios (01 - 04) + Auditoría */}
+        {/* 4. Capacidades y Servicios (01 - 04) + Auditoría */}
         <ServicesSection
           onSelectService={handleSelectService}
           onRequestAudit={handleRequestEmergencyAudit}
         />
 
-        {/* 4. Especificaciones Técnicas (20 Techs + Filtro + Búsqueda) */}
+        {/* 5. Especificaciones Técnicas (20 Techs + Filtro + Búsqueda) */}
         <TechSpecsSection
           onAuditStackClick={() => {
             setSelectedServiceForContact('Auditoría Crítica & Contingencia');
-            setCustomMessageForContact('Hola Gastón, quisiera solicitar una auditoría técnica de nuestro stack tecnológico actual para detectar cuellos de botella y vulnerabilidades.');
+            setCustomMessageForContact(
+              'Hola Gastón, quisiera solicitar una auditoría técnica de nuestro stack tecnológico actual para detectar cuellos de botella y vulnerabilidades.'
+            );
             scrollToSection('contacto');
           }}
         />
 
-        {/* 5. Metodología de Ingeniería (4 Fases con Stepper) */}
+        {/* 6. Metodología de Ingeniería (4 Fases con Stepper) */}
         <MethodologySection />
 
-        {/* 6. Casos de Estudio con Métricas Cuantificables */}
+        {/* 7. Casos de Estudio con Métricas Cuantificables */}
         <CaseStudiesSection onSimilarCaseClick={handleSimilarCaseClick} />
 
-        {/* 7. Configurador Interactivo de Arquitectura */}
+        {/* 8. Configurador Interactivo de Arquitectura */}
         <ArchitectureConfigurator
           onSendScopeToContact={handleSendScopeFromConfigurator}
           onWhatsAppWithScope={handleOpenWhatsApp}
         />
 
-        {/* 8. Propuesta de Valor Sectorial */}
+        {/* 9. Propuesta de Valor Sectorial */}
         <SectorSolutionsSection onSectorSelect={handleSelectSector} />
 
-        {/* 9. Perfil Profesional */}
-        <AboutProfileSection onScheduleClick={() => scrollToSection('contacto')} />
+        {/* 10. Perfil Profesional */}
+        <AboutProfileSection onScheduleClick={() => openScheduleModal()} />
 
-        {/* 10. Contacto Directo, Formulario & FAQs */}
+        {/* 11. Contacto Directo, Formulario, Calendly & FAQs */}
         <ContactSection
           initialService={selectedServiceForContact}
           initialMessage={customMessageForContact}
           onWhatsAppClick={handleOpenWhatsApp}
+          onScheduleClick={() => openScheduleModal()}
         />
       </main>
 
       {/* Footer */}
-      <Footer onWhatsAppClick={() => handleOpenWhatsApp()} />
+      <Footer 
+        onWhatsAppClick={() => handleOpenWhatsApp()} 
+        onScheduleClick={() => openScheduleModal()} 
+      />
+
+      {/* Interactive 30-min Technical Meeting Scheduling Modal (Calendly / Cal.com / WhatsApp) */}
+      <ScheduleModal
+        isOpen={isScheduleOpen}
+        onClose={() => setIsScheduleOpen(false)}
+        proposalContext={scheduleContext}
+        onNavigateToForm={() => scrollToSection('contacto')}
+        onWhatsAppClick={handleOpenWhatsApp}
+      />
     </div>
   );
 }
