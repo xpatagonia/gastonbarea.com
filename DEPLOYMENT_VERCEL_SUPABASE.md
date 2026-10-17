@@ -31,9 +31,10 @@
 
 | Variable | Valor | Descripción |
 |---|---|---|
-| `GEMINI_API_KEY` | `AIzaSy...` | Clave de Google Gemini API para el motor de arquitectura con IA |
-| `VITE_SUPABASE_URL` | `https://xyz.supabase.co` | URL de tu proyecto de Supabase |
-| `VITE_SUPABASE_ANON_KEY` | `eyJ...` | Clave pública anónima de Supabase |
+| `GEMINI_API_KEY` | `AIzaSy...` | Clave de Google Gemini API para el motor de arquitectura con IA (Privada en backend) |
+| `SUPABASE_URL` | `https://xyz.supabase.co` | URL privada de tu proyecto Supabase (sin prefijo VITE_ para no exponerla al navegador) |
+| `SUPABASE_ANON_KEY` | `eyJ...` | Clave de acceso a Supabase (Privada en backend) |
+| `SUPABASE_SERVICE_ROLE_KEY` | `eyJ...` | (Opcional) Clave con permisos administrativos para operaciones seguras en backend |
 
 5. Hacé clic en **Deploy**.
    - Vercel construirá el sitio automáticamente en menos de 1 minuto con el archivo `vercel.json` ya preconfigurado.

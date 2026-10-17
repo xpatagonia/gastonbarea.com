@@ -4,23 +4,24 @@ import {
   MapPin, 
   ShieldCheck, 
   Camera, 
-  ChevronRight,
-  Sparkles,
-  Play,
-  Pause,
-  Video,
-  EyeOff,
-  Sliders,
-  X,
-  TrendingUp,
-  Brain,
-  Cpu,
-  Layers,
-  ArrowUpRight,
-  CheckCircle2,
-  Calendar,
-  MessageSquare
+  ChevronRight, 
+  Sparkles, 
+  Play, 
+  Pause, 
+  Video, 
+  EyeOff, 
+  Sliders, 
+  X, 
+  TrendingUp, 
+  Brain, 
+  Cpu, 
+  Layers, 
+  ArrowUpRight, 
+  CheckCircle2, 
+  Calendar, 
+  MessageSquare 
 } from 'lucide-react';
+import { PresentationVideo } from './PresentationVideo';
 
 interface HeroProps {
   onExploreServices: () => void;
@@ -302,8 +303,14 @@ export const Hero: React.FC<HeroProps> = ({
           <span>Patagonia Argentina · Consultoría Estratégica & Arquitectura Remota Global</span>
         </div>
 
+        {/* Video de Presentación Ejecutiva YouTube: Nuevos Modelos de Negocio Digitales */}
+        <PresentationVideo
+          onScheduleClick={onScheduleClick}
+          onDiagnosticoClick={onDiagnosticoClick}
+        />
+
         {/* 4. MASTER INTEGRATED EXECUTIVE ARCHITECTURE CONSOLE (No Floating Cards, Fully Integrated Structure) */}
-        <div className="pt-6 max-w-5xl mx-auto text-left">
+        <div className="pt-2 max-w-5xl mx-auto text-left">
           <div className="rounded-2xl bg-white border border-blue-900/15 shadow-sm overflow-hidden">
             
             {/* Top Bar: Profile & Real-Time Availability (Integrated Header) */}

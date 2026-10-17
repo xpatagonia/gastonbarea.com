@@ -1,5 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import { Menu, X, Linkedin, Github, Calendar, Sparkles } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import {
+  Menu,
+  X,
+  Linkedin,
+  Github,
+  Calendar,
+  Sparkles,
+  TrendingUp,
+  FolderGit2,
+  Cpu,
+  ChevronDown,
+  Layers,
+  Brain,
+  Sliders,
+  Server
+} from 'lucide-react';
 import { SITE_CONFIG } from '../data/siteConfig';
 
 interface HeaderProps {
@@ -10,6 +25,8 @@ interface HeaderProps {
 export const Header: React.FC<HeaderProps> = ({ onScheduleClick, onWhatsAppClick }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [technicalDropdownOpen, setTechnicalDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -19,36 +36,66 @@ export const Header: React.FC<HeaderProps> = ({ onScheduleClick, onWhatsAppClick
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const navLinks = [
-    { label: '3 Pilares Estratégicos', href: '#tres-pilares', highlight: true },
-    { label: 'Diagnóstico con IA', href: '#diagnostico-ia' },
-    { label: 'Servicios', href: '#servicios' },
-    { label: 'Modern Tech Stack', href: '#tech-specs' },
-    { label: 'Casos Reales', href: '#casos' },
-    { label: 'Configurador', href: '#configurador' },
-    { label: 'Contacto', href: '#contacto' },
-  ];
+  // Close dropdown on outside click
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setTechnicalDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
     setMobileMenuOpen(false);
+    setTechnicalDropdownOpen(false);
     const element = document.querySelector(href);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
+  const technicalItems = [
+    {
+      label: 'Modern Tech Stack',
+      desc: 'Vercel Edge, Supabase & React 19',
+      href: '#tech-specs',
+      icon: Cpu,
+    },
+    {
+      label: 'Diagnóstico Interactivo con IA',
+      desc: 'Simulador de soluciones personalizadas',
+      href: '#diagnostico-ia',
+      icon: Brain,
+    },
+    {
+      label: 'Topología de Servidores',
+      desc: 'Infraestructura Linux, Docker & VPN',
+      href: '#topologia',
+      icon: Server,
+    },
+    {
+      label: 'Configurador de Arquitectura',
+      desc: 'Estimador de tiempos y stack óptimo',
+      href: '#configurador',
+      icon: Sliders,
+    },
+  ];
+
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         isScrolled
-          ? 'bg-[#F4F4F4]/85 backdrop-blur-2xl border-b border-blue-900/10 shadow-sm py-3'
-          : 'bg-[#F4F4F4]/60 backdrop-blur-xl border-b border-blue-900/5 py-4'
+          ? 'bg-[#F4F4F4]/90 backdrop-blur-2xl border-b border-blue-900/10 shadow-sm py-2.5'
+          : 'bg-[#F4F4F4]/70 backdrop-blur-xl border-b border-blue-900/5 py-3.5'
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between gap-6">
-          {/* Zone 1: Apple-style Minimalist Wordmark in Blue */}
+        <div className="flex items-center justify-between gap-4">
+          
+          {/* Brand Wordmark */}
           <a
             href="#"
             className="flex items-center gap-2.5 text-sm font-semibold tracking-tight text-blue-950 whitespace-nowrap shrink-0 group"
@@ -66,28 +113,108 @@ export const Header: React.FC<HeaderProps> = ({ onScheduleClick, onWhatsAppClick
             </div>
           </a>
 
-          {/* Zone 2: Navigation Links in Blue */}
-          <nav className="hidden lg:flex items-center gap-5 text-[13px] font-medium text-blue-900/80">
-            {navLinks.map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                onClick={(e) => handleNavClick(e, link.href)}
-                className={`transition-all whitespace-nowrap shrink-0 ${
-                  link.highlight
-                    ? 'font-bold text-blue-600 bg-blue-50 px-3 py-1 rounded-full border border-blue-200/60 hover:bg-blue-100'
-                    : 'hover:text-blue-600'
+          {/* Desktop Navigation Links */}
+          <nav className="hidden lg:flex items-center gap-2 xl:gap-3 text-[13px] font-medium text-blue-900/85">
+            
+            {/* BOTÓN INNOVACIÓN DESTACADO (3 Pilares) */}
+            <a
+              href="#innovacion"
+              onClick={(e) => handleNavClick(e, '#innovacion')}
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold text-blue-700 bg-blue-100/80 hover:bg-blue-600 hover:text-white border border-blue-200 shadow-2xs transition-all active:scale-95"
+            >
+              <TrendingUp className="w-3.5 h-3.5 text-blue-600 group-hover:text-white" />
+              <span>INNOVACIÓN</span>
+            </a>
+
+            {/* PROYECTOS */}
+            <a
+              href="#proyectos"
+              onClick={(e) => handleNavClick(e, '#proyectos')}
+              className="px-3 py-1.5 rounded-lg text-blue-950 hover:text-blue-600 hover:bg-blue-50/70 font-semibold tracking-wide transition-all inline-flex items-center gap-1.5"
+            >
+              <FolderGit2 className="w-3.5 h-3.5 text-blue-600" />
+              <span>PROYECTOS</span>
+            </a>
+
+            {/* MENÚ DESPLEGABLE: PARTE TÉCNICA */}
+            <div className="relative" ref={dropdownRef}>
+              <button
+                type="button"
+                onClick={() => setTechnicalDropdownOpen(!technicalDropdownOpen)}
+                className={`px-3 py-1.5 rounded-lg transition-all inline-flex items-center gap-1.5 font-semibold text-blue-950 hover:text-blue-600 hover:bg-blue-50/70 cursor-pointer ${
+                  technicalDropdownOpen ? 'bg-blue-50 text-blue-600' : ''
                 }`}
               >
-                {link.label}
-              </a>
-            ))}
+                <Cpu className="w-3.5 h-3.5 text-indigo-600" />
+                <span>PARTE TÉCNICA</span>
+                <ChevronDown
+                  className={`w-3.5 h-3.5 text-blue-500 transition-transform duration-200 ${
+                    technicalDropdownOpen ? 'rotate-180' : ''
+                  }`}
+                />
+              </button>
+
+              {/* Technical Submenu Dropdown Card */}
+              {technicalDropdownOpen && (
+                <div className="absolute top-full left-0 mt-2 w-80 bg-white rounded-2xl border border-blue-900/15 shadow-xl shadow-blue-950/10 p-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
+                  <div className="px-3 py-2 border-b border-slate-100 mb-1">
+                    <span className="text-[10px] font-mono uppercase tracking-wider text-blue-600 font-bold">
+                      Arquitectura & Herramientas Técnicas
+                    </span>
+                  </div>
+                  <div className="space-y-1">
+                    {technicalItems.map((item) => {
+                      const Icon = item.icon;
+                      return (
+                        <a
+                          key={item.href}
+                          href={item.href}
+                          onClick={(e) => handleNavClick(e, item.href)}
+                          className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-blue-50/80 transition-colors group"
+                        >
+                          <span className="w-8 h-8 rounded-lg bg-blue-100/70 text-blue-700 flex items-center justify-center shrink-0 mt-0.5 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                            <Icon className="w-4 h-4" />
+                          </span>
+                          <div>
+                            <div className="text-xs font-bold text-slate-900 group-hover:text-blue-600 transition-colors">
+                              {item.label}
+                            </div>
+                            <div className="text-[11px] text-slate-500 line-clamp-1">
+                              {item.desc}
+                            </div>
+                          </div>
+                        </a>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* SERVICIOS */}
+            <a
+              href="#servicios"
+              onClick={(e) => handleNavClick(e, '#servicios')}
+              className="px-3 py-1.5 rounded-lg text-slate-700 hover:text-blue-600 hover:bg-blue-50/60 transition-all"
+            >
+              Servicios
+            </a>
+
+            {/* CONTACTO */}
+            <a
+              href="#contacto"
+              onClick={(e) => handleNavClick(e, '#contacto')}
+              className="px-3 py-1.5 rounded-lg text-slate-700 hover:text-blue-600 hover:bg-blue-50/60 transition-all"
+            >
+              Contacto
+            </a>
+
           </nav>
 
-          {/* Zone 3: Social Icons + Schedule CTAs */}
-          <div className="hidden sm:flex items-center gap-2.5 shrink-0">
+          {/* Social Icons + Schedule CTAs */}
+          <div className="hidden sm:flex items-center gap-2 shrink-0">
             {/* Social icons */}
-            <div className="flex items-center gap-1.5 pr-2 border-r border-blue-200/80">
+            <div className="flex items-center gap-1 pr-1.5 border-r border-blue-200/80">
               <a
                 href={SITE_CONFIG.social.linkedin}
                 target="_blank"
@@ -113,7 +240,7 @@ export const Header: React.FC<HeaderProps> = ({ onScheduleClick, onWhatsAppClick
             <button
               onClick={() => onWhatsAppClick()}
               type="button"
-              className="px-3.5 py-1.5 text-xs font-semibold text-blue-900 bg-white hover:bg-blue-50/70 border border-blue-200/80 rounded-full transition-all whitespace-nowrap shadow-xs cursor-pointer"
+              className="px-3 py-1.5 text-xs font-semibold text-blue-900 bg-white hover:bg-blue-50/70 border border-blue-200/80 rounded-full transition-all whitespace-nowrap shadow-2xs cursor-pointer"
             >
               WhatsApp
             </button>
@@ -121,10 +248,10 @@ export const Header: React.FC<HeaderProps> = ({ onScheduleClick, onWhatsAppClick
             <button
               onClick={onScheduleClick}
               type="button"
-              className="px-4 py-1.5 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 active:scale-[0.98] rounded-full transition-all whitespace-nowrap shadow-sm shadow-blue-600/25 flex items-center gap-1.5 cursor-pointer"
+              className="px-3.5 py-1.5 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 active:scale-[0.98] rounded-full transition-all whitespace-nowrap shadow-sm shadow-blue-600/25 flex items-center gap-1.5 cursor-pointer"
             >
               <Calendar className="w-3.5 h-3.5" />
-              <span>Agendar Reunión (30m)</span>
+              <span>Agendar (30m)</span>
             </button>
           </div>
 
@@ -133,7 +260,7 @@ export const Header: React.FC<HeaderProps> = ({ onScheduleClick, onWhatsAppClick
             <button
               onClick={onScheduleClick}
               type="button"
-              className="sm:hidden px-3 py-1 text-xs font-semibold text-white bg-blue-600 rounded-full flex items-center gap-1"
+              className="sm:hidden px-3 py-1 text-xs font-semibold text-white bg-blue-600 rounded-full flex items-center gap-1 cursor-pointer"
             >
               <Calendar className="w-3 h-3" />
               <span>Agendar</span>
@@ -147,27 +274,74 @@ export const Header: React.FC<HeaderProps> = ({ onScheduleClick, onWhatsAppClick
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>
+
         </div>
       </div>
 
       {/* Mobile drawer */}
       {mobileMenuOpen && (
-        <div className="lg:hidden bg-[#F4F4F4]/98 backdrop-blur-2xl border-b border-blue-200/80 px-6 pt-4 pb-6 mt-3 space-y-4">
-          <div className="flex flex-col space-y-3">
-            {navLinks.map((link) => (
+        <div className="lg:hidden bg-[#F4F4F4]/98 backdrop-blur-2xl border-b border-blue-200/80 px-6 pt-4 pb-6 mt-3 space-y-4 max-h-[80vh] overflow-y-auto">
+          <div className="flex flex-col space-y-2">
+            
+            {/* Mobile INNOVACIÓN Button */}
+            <a
+              href="#innovacion"
+              onClick={(e) => handleNavClick(e, '#innovacion')}
+              className="flex items-center gap-2 py-2 px-3 rounded-xl bg-blue-100/90 text-blue-700 font-bold text-sm border border-blue-300"
+            >
+              <TrendingUp className="w-4 h-4 text-blue-600" />
+              <span>INNOVACIÓN (3 Pilares)</span>
+            </a>
+
+            {/* Mobile PROYECTOS */}
+            <a
+              href="#proyectos"
+              onClick={(e) => handleNavClick(e, '#proyectos')}
+              className="flex items-center gap-2 py-2 px-3 rounded-xl hover:bg-blue-50 text-blue-950 font-bold text-sm"
+            >
+              <FolderGit2 className="w-4 h-4 text-blue-600" />
+              <span>PROYECTOS & CASOS DE IMPACTO</span>
+            </a>
+
+            {/* Mobile PARTE TÉCNICA Section */}
+            <div className="pt-2 pb-1">
+              <span className="text-[10px] font-mono tracking-wider uppercase text-blue-600 font-bold px-3">
+                PARTE TÉCNICA
+              </span>
+              <div className="mt-1 space-y-1 pl-2">
+                {technicalItems.map((item) => {
+                  const Icon = item.icon;
+                  return (
+                    <a
+                      key={item.href}
+                      href={item.href}
+                      onClick={(e) => handleNavClick(e, item.href)}
+                      className="flex items-center gap-2.5 py-1.5 px-3 rounded-lg text-xs font-medium text-slate-800 hover:text-blue-600 hover:bg-blue-50"
+                    >
+                      <Icon className="w-3.5 h-3.5 text-slate-500" />
+                      <span>{item.label}</span>
+                    </a>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div className="pt-1 space-y-1 border-t border-slate-200">
               <a
-                key={link.label}
-                href={link.href}
-                onClick={(e) => handleNavClick(e, link.href)}
-                className={`text-sm py-1 font-semibold ${
-                  link.highlight
-                    ? 'text-blue-600 font-bold'
-                    : 'text-blue-900 hover:text-blue-600'
-                }`}
+                href="#servicios"
+                onClick={(e) => handleNavClick(e, '#servicios')}
+                className="block py-1.5 px-3 text-sm font-semibold text-slate-800 hover:text-blue-600"
               >
-                {link.label}
+                Servicios
               </a>
-            ))}
+              <a
+                href="#contacto"
+                onClick={(e) => handleNavClick(e, '#contacto')}
+                className="block py-1.5 px-3 text-sm font-semibold text-slate-800 hover:text-blue-600"
+              >
+                Contacto Directo
+              </a>
+            </div>
           </div>
 
           <div className="pt-4 border-t border-blue-200/60 space-y-3">
@@ -193,7 +367,7 @@ export const Header: React.FC<HeaderProps> = ({ onScheduleClick, onWhatsAppClick
               </a>
             </div>
 
-            <div className="flex flex-col gap-2.5">
+            <div className="flex flex-col gap-2">
               <button
                 onClick={() => {
                   setMobileMenuOpen(false);

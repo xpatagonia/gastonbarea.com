@@ -4,6 +4,8 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { createServer as createViteServer } from 'vite';
 import { GoogleGenAI, Type } from '@google/genai';
+import { createClient } from '@supabase/supabase-js';
+import { sendProposalAutomation, sendContactAutomation } from './src/services/emailAutomation.ts';
 
 dotenv.config();
 
@@ -29,6 +31,19 @@ if (apiKey) {
     },
   });
 }
+
+// Server-side private Supabase Client (No public VITE_ prefix needed)
+const supabaseUrl = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
+const supabaseKey =
+  process.env.SUPABASE_SERVICE_ROLE_KEY ||
+  process.env.SUPABASE_ANON_KEY ||
+  process.env.VITE_SUPABASE_ANON_KEY;
+
+const supabase =
+  supabaseUrl && supabaseKey && !supabaseUrl.includes('your-project-id')
+    ? createClient(supabaseUrl, supabaseKey)
+    : null;
+
 
 // Fallback generator for realistic architecture proposals if API key is missing or calls fail
 function generateRuleBasedProposal(payload: {
@@ -305,6 +320,132 @@ Mantén el tono profesional, claro, seguro y accesible.`;
     });
   }
 });
+
+// Private server-side endpoint for saving diagnosis proposals
+app.post('/api/save-proposal', async (req, res) => {
+  const proposalData = req.body || {};
+
+  if (!supabase) {
+    return res.json({ success: true, mocked: true });
+  }
+
+  try {
+    const { data, error } = await supabase.from('proposals').insert([
+      {
+        organization_type: proposalData.organizationType,
+        company_name: proposalData.companyName || null,
+        primary_challenge: proposalData.primaryChallenge,
+        current_stack: proposalData.currentStack || [],
+        urgency: proposalData.urgency,
+        architecture_title: proposalData.architectureTitle,
+        diagnostic_summary: proposalData.diagnosticSummary,
+        estimated_timeline: proposalData.estimatedTimeline,
+        recommended_stack: proposalData.recommendedStack || [],
+        executive_message: proposalData.executiveMessage,
+        created_at: new Date().toISOString(),
+      },
+    ]);
+
+    if (error) {
+      console.error('Error saving proposal to Supabase:', error);
+      return res.status(500).json({ success: false, error: error.message });
+    }
+
+    // Trigger asynchronous automated email notification (Worker background task)
+    sendProposalAutomation(proposalData).catch((err) => {
+      console.error('[Worker Automation] Error in background email task:', err);
+    });
+
+    return res.json({ success: true, data });
+  } catch (err: any) {
+    console.error('Exception saving proposal to Supabase:', err);
+    return res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// Private server-side endpoint for saving contact inquiries
+app.post('/api/save-contact', async (req, res) => {
+  const inquiryData = req.body || {};
+
+  if (!supabase) {
+    return res.json({ success: true, mocked: true });
+  }
+
+  try {
+    const { data, error } = await supabase.from('contact_inquiries').insert([
+      {
+        name: inquiryData.name,
+        email: inquiryData.email,
+        company: inquiryData.company || null,
+        service_area: inquiryData.serviceArea,
+        requirements: inquiryData.requirements,
+        created_at: inquiryData.createdAt || new Date().toISOString(),
+      },
+    ]);
+
+    if (error) {
+      console.error('Error saving contact to Supabase:', error);
+      return res.status(500).json({ success: false, error: error.message });
+    }
+
+    // Trigger asynchronous contact notifications (Worker background task)
+    sendContactAutomation(inquiryData).catch((err) => {
+      console.error('[Worker Automation] Error in background email task:', err);
+    });
+
+    return res.json({ success: true, data });
+  } catch (err: any) {
+    console.error('Exception saving contact to Supabase:', err);
+    return res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// Render / Supabase Webhook Endpoint for external database event triggers
+app.post('/api/webhooks/supabase', async (req, res) => {
+  try {
+    const webhookSecret = process.env.WEBHOOK_SECRET;
+    const providedSecret = req.headers['x-webhook-secret'] || req.query.secret;
+
+    if (webhookSecret && providedSecret !== webhookSecret) {
+      return res.status(401).json({ error: 'Unauthorized webhook call' });
+    }
+
+    const { type, table, record } = req.body || {};
+    console.log(`[Supabase Webhook] Received ${type} event on table "${table}"`);
+
+    if (type === 'INSERT' && record) {
+      if (table === 'proposals') {
+        await sendProposalAutomation({
+          organizationType: record.organization_type,
+          companyName: record.company_name,
+          primaryChallenge: record.primary_challenge,
+          currentStack: record.current_stack,
+          urgency: record.urgency,
+          architectureTitle: record.architecture_title,
+          diagnosticSummary: record.diagnostic_summary,
+          estimatedTimeline: record.estimated_timeline,
+          recommendedStack: record.recommended_stack,
+          executiveMessage: record.executive_message,
+          clientEmail: record.client_email,
+        });
+      } else if (table === 'contact_inquiries') {
+        await sendContactAutomation({
+          name: record.name,
+          email: record.email,
+          company: record.company,
+          serviceArea: record.service_area,
+          requirements: record.requirements,
+        });
+      }
+    }
+
+    return res.json({ received: true, table, type });
+  } catch (err: any) {
+    console.error('[Supabase Webhook] Processing error:', err);
+    return res.status(500).json({ error: err.message });
+  }
+});
+
 
 async function startServer() {
   const isProduction = process.env.NODE_ENV === 'production';

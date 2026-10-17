@@ -12,13 +12,14 @@ export const CaseStudiesSection: React.FC<CaseStudiesSectionProps> = ({ onSimila
   const activeCase = CASE_STUDIES_DATA.find((c) => c.id === selectedCaseId) || CASE_STUDIES_DATA[0];
 
   return (
-    <section id="casos" className="py-24 md:py-32 bg-[#F4F4F4] relative border-b border-blue-900/10">
+    <section id="proyectos" className="py-24 md:py-32 bg-[#F4F4F4] relative border-b border-blue-900/10">
+      <div id="casos" className="absolute -top-24 pointer-events-none" />
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Apple Section Header in Blue */}
+        {/* Section Header */}
         <div className="max-w-3xl mb-16">
           <div className="text-[11px] font-mono tracking-widest uppercase text-blue-600 mb-3 font-semibold">
-            CASOS DE ESTUDIO & IMPACTO
+            PROYECTOS & CASOS DE IMPACTO
           </div>
           <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-blue-950 leading-tight">
             Resultados medibles en entornos de alta exigencia.

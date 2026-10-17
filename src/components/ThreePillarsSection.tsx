@@ -60,7 +60,8 @@ export const ThreePillarsSection: React.FC<ThreePillarsSectionProps> = ({
   };
 
   return (
-    <section id="tres-pilares" className="relative py-20 md:py-28 overflow-hidden bg-[#F4F4F4] border-b border-blue-900/10">
+    <section id="innovacion" className="relative py-20 md:py-28 overflow-hidden bg-[#F4F4F4] border-b border-blue-900/10">
+      <div id="tres-pilares" className="absolute -top-24 pointer-events-none" />
       
       {/* Dynamic Background Grid & Subtle Ambient Glow (Grounded, No Floating Motion) */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden z-0" aria-hidden="true">
