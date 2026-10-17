@@ -13,7 +13,8 @@ import {
   Layers,
   Brain,
   Sliders,
-  Server
+  Server,
+  BookOpen
 } from 'lucide-react';
 import { SITE_CONFIG } from '../data/siteConfig';
 
@@ -134,6 +135,16 @@ export const Header: React.FC<HeaderProps> = ({ onScheduleClick, onWhatsAppClick
             >
               <FolderGit2 className="w-3.5 h-3.5 text-blue-600" />
               <span>PROYECTOS</span>
+            </a>
+
+            {/* BLOG */}
+            <a
+              href="#blog"
+              onClick={(e) => handleNavClick(e, '#blog')}
+              className="px-3 py-1.5 rounded-lg text-blue-950 hover:text-blue-600 hover:bg-blue-50/70 font-semibold tracking-wide transition-all inline-flex items-center gap-1.5"
+            >
+              <BookOpen className="w-3.5 h-3.5 text-blue-600" />
+              <span>BLOG</span>
             </a>
 
             {/* MENÚ DESPLEGABLE: PARTE TÉCNICA */}
@@ -301,6 +312,16 @@ export const Header: React.FC<HeaderProps> = ({ onScheduleClick, onWhatsAppClick
             >
               <FolderGit2 className="w-4 h-4 text-blue-600" />
               <span>PROYECTOS & CASOS DE IMPACTO</span>
+            </a>
+
+            {/* Mobile BLOG */}
+            <a
+              href="#blog"
+              onClick={(e) => handleNavClick(e, '#blog')}
+              className="flex items-center gap-2 py-2 px-3 rounded-xl hover:bg-blue-50 text-blue-950 font-bold text-sm"
+            >
+              <BookOpen className="w-4 h-4 text-blue-600" />
+              <span>BLOG & ARTÍCULOS</span>
             </a>
 
             {/* Mobile PARTE TÉCNICA Section */}

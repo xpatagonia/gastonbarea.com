@@ -75,3 +75,42 @@ FOR ALL
 TO authenticated 
 USING (true)
 WITH CHECK (true);
+
+-- 5. TABLA: ARTÍCULOS DE BLOG MULTIMEDIA (GASTÓN BAREA - AUTOR ÚNICO)
+CREATE TABLE IF NOT EXISTS public.blog_posts (
+    id TEXT PRIMARY KEY,
+    slug TEXT UNIQUE NOT NULL,
+    title TEXT NOT NULL,
+    excerpt TEXT NOT NULL,
+    category TEXT NOT NULL,
+    cover_image TEXT,
+    published_at DATE DEFAULT CURRENT_DATE,
+    read_time TEXT DEFAULT '5 min',
+    featured BOOLEAN DEFAULT false,
+    author JSONB DEFAULT '{"name": "Gastón Barea", "role": "Business Innovación & Software Architect"}'::jsonb,
+    tags TEXT[] DEFAULT '{}',
+    blocks JSONB NOT NULL DEFAULT '[]'::jsonb,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_blog_posts_slug ON public.blog_posts (slug);
+CREATE INDEX IF NOT EXISTS idx_blog_posts_category ON public.blog_posts (category);
+CREATE INDEX IF NOT EXISTS idx_blog_posts_published_at ON public.blog_posts (published_at DESC);
+
+-- RLS: Lectura pública (cualquier visitante puede leer artículos)
+ALTER TABLE public.blog_posts ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Permitir lectura pública de artículos" 
+ON public.blog_posts 
+FOR SELECT 
+TO anon, authenticated 
+USING (true);
+
+-- RLS: Escritura restringida al rol autenticado / service_role (Gastón Barea)
+CREATE POLICY "Permitir gestión de artículos únicamente a Gastón" 
+ON public.blog_posts 
+FOR ALL 
+TO authenticated 
+USING (true)
+WITH CHECK (true);
+

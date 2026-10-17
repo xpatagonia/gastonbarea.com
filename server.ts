@@ -446,6 +446,57 @@ app.post('/api/webhooks/supabase', async (req, res) => {
   }
 });
 
+// Blog Posts API Endpoints (Private Supabase integration)
+app.get('/api/blog/posts', async (_req, res) => {
+  if (supabase) {
+    try {
+      const { data, error } = await supabase
+        .from('blog_posts')
+        .select('*')
+        .order('published_at', { ascending: false });
+
+      if (!error && data && data.length > 0) {
+        return res.json({ success: true, posts: data });
+      }
+    } catch (err) {
+      console.warn('Supabase blog fetch fallback:', err);
+    }
+  }
+  return res.json({ success: true, posts: [] });
+});
+
+app.post('/api/blog/posts', async (req, res) => {
+  const post = req.body;
+  if (!supabase) {
+    return res.json({ success: true, mocked: true });
+  }
+
+  try {
+    const { data, error } = await supabase.from('blog_posts').upsert([
+      {
+        id: post.id,
+        slug: post.slug,
+        title: post.title,
+        excerpt: post.excerpt,
+        category: post.category,
+        cover_image: post.coverImage || null,
+        published_at: post.publishedAt,
+        read_time: post.readTime,
+        featured: post.featured || false,
+        author: post.author,
+        tags: post.tags || [],
+        blocks: post.blocks || [],
+      },
+    ]);
+
+    if (error) {
+      return res.status(500).json({ success: false, error: error.message });
+    }
+    return res.json({ success: true, data });
+  } catch (err: any) {
+    return res.status(500).json({ success: false, error: err.message });
+  }
+});
 
 async function startServer() {
   const isProduction = process.env.NODE_ENV === 'production';

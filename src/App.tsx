@@ -15,6 +15,7 @@ import { MethodologySection } from './components/MethodologySection';
 import { CaseStudiesSection } from './components/CaseStudiesSection';
 import { ArchitectureConfigurator } from './components/ArchitectureConfigurator';
 import { SectorSolutionsSection } from './components/SectorSolutionsSection';
+import { BlogSection } from './components/BlogSection';
 import { AboutProfileSection } from './components/AboutProfileSection';
 import { ContactSection } from './components/ContactSection';
 import { Footer } from './components/Footer';
@@ -175,7 +176,13 @@ Quisiéramos coordinar una llamada de diagnóstico técnico para evaluar la viab
         {/* 10. Propuesta de Valor Sectorial */}
         <SectorSolutionsSection onSectorSelect={handleSelectSector} />
 
-        {/* 11. Perfil Profesional */}
+        {/* 11. Blog Técnico Multimedia (Texto, YouTube, Spotify, Audio & Fotos) */}
+        <BlogSection
+          onScheduleClick={() => openScheduleModal()}
+          onWhatsAppClick={handleOpenWhatsApp}
+        />
+
+        {/* 12. Perfil Profesional */}
         <AboutProfileSection onScheduleClick={() => openScheduleModal()} />
 
         {/* 12. Contacto Directo, Formulario, Calendly & FAQs */}
